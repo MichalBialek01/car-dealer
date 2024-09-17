@@ -1,0 +1,117 @@
+<!DOCTYPE HTML>
+<html xmlns:th="http://www.thymeleaf.org">
+
+<head>
+    <meta http-equiv="Content-Type" content="text/html; charset=UTF-8"/>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.2.2/dist/css/bootstrap.min.css"
+          rel="stylesheet"
+          integrity="sha384-Zenh87qX5JnK2Jl0vWa8Ck2rdkQ2Bzep5IDxbcnCeuOxjzrPF/et3URy9Bv1WTRi"
+          crossorigin="anonymous">
+    <title> Car Dealer</title>
+</head>
+
+<body>
+<div class="container">
+    <h1> Car Dealer!</h1>
+</div>
+
+<div class="container">
+    <div class="row mt-3">
+        <div class="col-md-4">
+            <a th:href="@{/}" class="btn btn-info" role="button">Go to the main page</a>
+        </div>
+    </div>
+    <!--    -->
+    <br>
+    <h2>Wanna buy a car ? </h2>
+    <p>Take a look at available cars! </p>
+
+    <div>
+        <table class="table">
+            <thead class="table-dark">
+            <tr>
+                <th>vin</th>
+                <th>brand</th>
+                <th>model</th>
+                <th>year</th>
+                <th>color</th>
+                <th>price</th>
+            </tr>
+            </thead>
+            <tbody>
+            <tr th:each="car: ${availableCarDTO}">
+                <td th:text="${car.vin}"></td>
+                <td th:text="${car.brand}"></td>
+                <td th:text="${car.model}"></td>
+                <td th:text="${car.year}"></td>
+                <td th:text="${car.color}"></td>
+                <td th:text="${car.price}"></td>
+            </tr>
+            </tbody>
+
+        </table>
+    </div>
+    <!--    -->
+    <br>
+    <h2>Wanna contact us ? </h2>
+    <p>Take a look at our available salesman! </p>
+    <div>
+        <table class="table">
+            <thead class="table-dark">
+            <tr>
+                <th>name</th>
+                <th>surname</th>
+                <th>pesel</th>
+            </tr>
+            </thead>
+            <tbody>
+            <tr th:each="salesman : ${availableSalesmenDTO}">
+                <td th:text="${salesman.name}"></td>
+                <td th:text="${salesman.surname}"></td>
+                <td th:text="${salesman.pesel}"></td>
+            </tr>
+        </table>
+    </div>
+    <!--    -->
+    <br>
+    <h2>Wanna repair a car ? </h2>
+    <p>Take a look at our available mechanics! </p>
+    <div>
+        <table class="table">
+            <thead class="table-dark">
+            <tr>
+                <th>name</th>
+                <th>surname</th>
+                <th>pesel</th>
+            </tr>
+            </thead>
+            <tbody>
+            <tr th:each="mechanic : ${availableMechanicDTO}">
+                <td th:text="${mechanic.name}"></td>
+                <td th:text="${mechanic.surname}"></td>
+                <td th:text="${mechanic.pesel}"></td>
+            </tr>
+        </table>
+    </div>
+    <!--    -->
+</div>
+<div class="container">
+    <div class="row mt-3">
+        <div class="col-md-4">
+            <a th:href="@{/purchase}" class="btn btn-success" role="button">Buy a car</a>
+        </div>
+        <div class="col-md-4">
+            <a th:href="@{/service/new}" class="btn btn-success" role="button">Service a car</a>
+        </div>
+        <div class="col-md-4">
+            <a th:href="@{/car/history}" class="btn btn-success" role="button">Car history</a>
+        </div>
+    </div>
+    <br>
+    <br>
+</div>
+
+
+</body>
+
+</html>

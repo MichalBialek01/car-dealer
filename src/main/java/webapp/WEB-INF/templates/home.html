@@ -1,0 +1,27 @@
+<!DOCTYPE HTML>
+<html xmlns:th="http://www.thymeleaf.org">
+
+<head>
+    <meta http-equiv="Content-Type" content="text/html; charset=UTF-8"/>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.2.2/dist/css/bootstrap.min.css"
+          rel="stylesheet"
+          integrity="sha384-Zenh87qX5JnK2Jl0vWa8Ck2rdkQ2Bzep5IDxbcnCeuOxjzrPF/et3URy9Bv1WTRi"
+          crossorigin="anonymous">
+    <title> Car Dealer</title>
+</head>
+
+<body>
+<div class="container">
+    <h1> Car Dealer!</h1>
+    <div class="row mt-3">
+        <div class="col-md-4">
+            <a th:href="@{/salesman}" class="btn btn-info" role="button">Salesman Portal</a>
+        </div>
+        <div class="col-md-4">
+            <a th:href="@{/mechanic}" class="btn btn-info" role="button">Mechanic Portal</a>
+        </div>
+    </div>
+</div>
+</body>
+
+</html>

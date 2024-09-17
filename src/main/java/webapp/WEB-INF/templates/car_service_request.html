@@ -1,0 +1,182 @@
+<!DOCTYPE HTML>
+<html>
+
+<head>
+    <meta http-equiv="Content-Type" content="text/html; charset=UTF-8"/>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.2.2/dist/css/bootstrap.min.css"
+          rel="stylesheet"
+          integrity="sha384-Zenh87qX5JnK2Jl0vWa8Ck2rdkQ2Bzep5IDxbcnCeuOxjzrPF/et3URy9Bv1WTRi"
+          crossorigin="anonymous">
+    <title> Car Dealer</title>
+</head>
+
+
+<body>
+<div class="container">
+    <h1>Car Dealer!</h1>
+</div>
+
+<div class="container">
+    <div class="row mt-3">
+        <div class="col-md-4">
+            <a th:href="@{/}" class="btn btn-info" role="button">Go back to the main page</a>
+        </div>
+    </div>
+
+    <br>
+    <br>
+
+    <h2>Having trouble with your car?</h2>
+    <p>Zajavka Car Service is for you!</p>
+    <p>Please fill in the following form!</p>
+
+    <h3>What is going on with your car?</h3>
+    <form action="#" th:action="@{/service/request}" th:object="${carServiceRequestDTO}" method="POST">
+        <div class="row mt-3">
+            <div class="col-md-6">
+                <h3>If you are existing customer - please give us your email and provide car vin number!</h3>
+                <div class="row mt-3">
+                    <div class="col-md-3">
+                        <label for="existingCustomerEmail">Your email:</label>
+                    </div>
+                    <div class="col-md-3">
+                        <input type="text" id="existingCustomerEmail" th:field="*{existingCustomerEmail}">
+                    </div>
+                </div>
+                <div class="row mt-3">
+                    <div class="col-md-3">
+                        <label for="existingCarVin">Car VIN:</label>
+                    </div>
+                    <div class="col-md-3">
+                        <input type="text" id="existingCarVin" th:field="*{existingCarVin}">
+                    </div>
+                </div>
+            </div>
+            <div class="col-md-6">
+                <h3>If you are new customer - please fill out every input in the form!</h3>
+                <br>
+                <p>Please enter customer data:</p>
+                <div class="row mt-3">
+                    <div class="col-md-3">
+                        <label for="customerName">Customer name:</label>
+                    </div>
+                    <div class="col-md-3">
+                        <input type="text" id="customerName" th:field="*{customerName}">
+                    </div>
+                </div>
+                <div class="row mt-3">
+                    <div class="col-md-3">
+                        <label for="customerSurname">Customer surname:</label>
+                    </div>
+                    <div class="col-md-3">
+                        <input type="text" id="customerSurname" th:field="*{customerSurname}">
+                    </div>
+                </div>
+                <div class="row mt-3">
+                    <div class="col-md-3">
+                        <label for="customerEmail">Customer email:</label>
+                    </div>
+                    <div class="col-md-3">
+                        <input type="text" id="customerEmail" th:field="*{customerEmail}">
+                    </div>
+                </div>
+                <div class="row mt-3">
+                    <div class="col-md-3">
+                        <label for="customerPhone">Phone number:</label>
+                    </div>
+                    <div class="col-md-3">
+                        <input type="text" id="customerPhone" th:field="*{customerPhone}">
+                    </div>
+                </div>
+                <br>
+                <p>Please provide customer address:</p>
+                <div class="row mt-3">
+                    <div class="col-md-3">
+                        <label for="customerAddressCountry">Country:</label>
+                    </div>
+                    <div class="col-md-3">
+                        <input type="text" id="customerAddressCountry" th:field="*{customerAddressCountry}">
+                    </div>
+                </div>
+                <div class="row mt-3">
+                    <div class="col-md-3">
+                        <label for="customerAddressCity">City:</label>
+                    </div>
+                    <div class="col-md-3">
+                        <input type="text" id="customerAddressCity" th:field="*{customerAddressCity}">
+                    </div>
+                </div>
+                <div class="row mt-3">
+                    <div class="col-md-3">
+                        <label for="customerAddressPostalCode">Postal code:</label>
+                    </div>
+                    <div class="col-md-3">
+                        <input type="text" id="customerAddressPostalCode" th:field="*{customerAddressPostalCode}">
+                    </div>
+                </div>
+                <div class="row mt-3">
+                    <div class="col-md-3">
+                        <label for="customerAddressStreet">Street:</label>
+                    </div>
+                    <div class="col-md-3">
+                        <input type="text" id="customerAddressStreet" th:field="*{customerAddressStreet}">
+                    </div>
+                </div>
+                <br>
+                <p>Please provide car data:</p>
+                <div class="row mt-3">
+                    <div class="col-md-3">
+                        <label for="carVin">Car VIN:</label>
+                    </div>
+                    <div class="col-md-3">
+                        <input type="text" id="carVin" th:field="*{carVin}">
+                    </div>
+                </div>
+                <div class="row mt-3">
+                    <div class="col-md-3">
+                        <label for="carBrand">Car Brand:</label>
+                    </div>
+                    <div class="col-md-3">
+                        <input type="text" id="carBrand" th:field="*{carBrand}">
+                    </div>
+                </div>
+                <div class="row mt-3">
+                    <div class="col-md-3">
+                        <label for="carModel">Car Model:</label>
+                    </div>
+                    <div class="col-md-3">
+                        <input type="text" id="carModel" th:field="*{carModel}">
+                    </div>
+                </div>
+                <div class="row mt-3">
+                    <div class="col-md-3">
+                        <label for="carYear">Car Year:</label>
+                    </div>
+                    <div class="col-md-3">
+                        <input type="text" id="carYear" th:field="*{carYear}">
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div class="row mt-3">
+            <div class="col-md-3">
+                <label for="customerComment">Comment:</label>
+            </div>
+            <div class="col-md-3">
+                <textarea id="customerComment" th:field="*{customerComment}" rows="10" cols="50" required="required"></textarea>
+            </div>
+        </div>
+        <div class="row mt-3">
+            <div class="col-md-6">
+                <input type="submit" value="Request!" class="btn btn-success">
+            </div>
+        </div>
+    </form>
+
+</div>
+
+<br>
+<br>
+</body>
+
+</html>

@@ -1,0 +1,114 @@
+<!DOCTYPE HTML>
+<html xmlns:th="http://www.thymeleaf.org">
+
+<head>
+    <meta http-equiv="Content-Type" content="text/html; charset=UTF-8"/>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.2.2/dist/css/bootstrap.min.css"
+          rel="stylesheet"
+          integrity="sha384-Zenh87qX5JnK2Jl0vWa8Ck2rdkQ2Bzep5IDxbcnCeuOxjzrPF/et3URy9Bv1WTRi"
+          crossorigin="anonymous">
+    <title> Car Dealer</title>
+</head>
+
+<body>
+<div class="container">
+    <h1> Car Dealer!</h1>
+    <div class="row mt-3">
+        <div class="col-md-4">
+            <a th:href="@{/}" class="btn btn-info" role="button">Go to the main page</a>
+        </div>
+    </div>
+    <br>
+    <br>
+
+    <h2>Display car history</h2>
+    <form action="#" th:action="@{/car/history}" method="GET">
+        <div class="row mt-3">
+            <div class="col-md-6">
+                <h3>What is going on with your car?</h3>
+                <div class="row mt-3">
+                    <div class="col-md-6">
+                        <label for="carVins">Car VIN:</label>
+                        <select id="carVins" th:name="carVin">
+                            <option th:each="carVin : ${allCarVins}" th:value="${carVin}" th:text="${carVin}"></option>
+                        </select>
+                    </div>
+                    <div class="col-md-6">
+                        <input type="submit" value="Find!" class="btn btn-success">
+                    </div>
+                </div>
+            </div>
+        </div>
+    </form>
+
+
+    <div class="row mt-3">
+        <div th:if="${carHistoryDTO.carServiceRequests.size() > 0}">
+            <p>Car history for vin: <b><span th:if="${carHistoryDTO.carVin}"
+                                             th:text="${carHistoryDTO.carVin}">CAR_VIN</span></b></p>
+            <p>Service requests:</p>
+            <table class="table">
+                <thead class="table-dark">
+                <tr>
+                    <th>Car service request number</th>
+                    <th>Received Data and time</th>
+                    <th>Completed data and time</th>
+                    <th>Client comment</th>
+                    <th>Provided services</th>
+                    <th>Used Parts</th>
+                </tr>
+                </thead>
+                <tbody>
+                <tr th:each="serviceRequest : ${carHistoryDTO.carServiceRequests}">
+                    <td th:text="${serviceRequest.carServiceRequestNumber}"></td>
+                    <td th:text="${serviceRequest.receivedDateTime}"></td>
+                    <td th:text="${serviceRequest.completedDateTime}"></td>
+                    <td th:text="${serviceRequest.customerComment}"></td>
+                    <td>
+                        <p>Services</p>
+                        <table class="table">
+                            <thead class="table-dark">
+                            <tr>
+                                <th>serviceCode</th>
+                                <th>description</th>
+                                <th>price</th>
+                            </tr>
+                            </thead>
+                            <tbody>
+                            <tr th:each="service : ${serviceRequest.services}">
+                                <td th:text="${service.serviceCode}"></td>
+                                <td th:text="${service.description}"></td>
+                                <td th:text="${service.price}"></td>
+                            </tr>
+                            </tbody>
+                        </table>
+                    </td>
+
+                    <td>
+                        <p>Parts</p>
+                        <table class="table">
+                            <thead class="table-dark">
+                            <tr>
+                                <th>serialNumber</th>
+                                <th>description</th>
+                                <th>price</th>
+                            </tr>
+                            </thead>
+                            <tbody>
+                            <tr th:each="part : ${serviceRequest.parts}">
+                                <td th:text="${part.serialNumber}"></td>
+                                <td th:text="${part.description}"></td>
+                                <td th:text="${part.price}"></td>
+                            </tr>
+                            </tbody>
+                        </table>
+                    </td>
+                </tr>
+                </tbody>
+            </table>
+        </div>
+    </div>
+</div>
+</body>
+
+</html>

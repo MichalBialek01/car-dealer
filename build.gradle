@@ -1,0 +1,72 @@
+plugins {
+    id 'java'
+    id 'war'
+}
+
+group = 'org.example'
+version = '1.0-SNAPSHOT'
+
+repositories {
+    mavenCentral()
+}
+
+dependencies {
+    implementation "ch.qos.logback:logback-classic:$logbackVersion"
+
+    compileOnly "org.projectlombok:lombok:$lombokVersion"
+    annotationProcessor "org.projectlombok:lombok:$lombokVersion"
+
+    implementation "org.mapstruct:mapstruct:$mapstructVersion"
+    annotationProcessor "org.mapstruct:mapstruct-processor:$mapstructVersion"
+
+    implementation "org.springframework:spring-core:$springVersion"
+    implementation "org.springframework:spring-beans:$springVersion"
+    implementation "org.springframework:spring-context:$springVersion"
+    implementation "org.springframework:spring-context-support:$springVersion"
+    implementation "org.springframework:spring-expression:$springVersion"
+    implementation "org.springframework:spring-jdbc:$springVersion"
+    implementation "org.springframework:spring-tx:$springVersion"
+
+
+    compileOnly "jakarta.platform:jakarta.jakartaee-api:$jakartaApiVersion"
+    implementation "org.springframework:spring-webmvc:$springVersion"
+    implementation "org.thymeleaf:thymeleaf:$thymeleafVersion"
+    implementation "org.thymeleaf:thymeleaf-spring6:$thymeleafVersion"
+
+    implementation "org.springframework.data:spring-data-jpa:$springDataVersion"
+    implementation "org.hibernate.orm:hibernate-core:$hibernateVersion"
+    implementation "org.hibernate.orm:hibernate-hikaricp:$hibernateVersion"
+    implementation "com.zaxxer:HikariCP:$hikariVersion"
+    implementation "org.postgresql:postgresql:$postgresqlVersion"
+
+    implementation "org.flywaydb:flyway-core:$flywayVersion"
+    implementation "org.flywaydb:flyway-database-postgresql:$flywayVersion"
+
+    implementation "org.springframework.boot:spring-boot-starter-mail:$springDataVersion"
+
+
+
+
+    testCompileOnly "org.projectlombok:lombok:$lombokVersion"
+    testAnnotationProcessor "org.projectlombok:lombok:$lombokVersion"
+
+//    testImplementation "org.junit.jupiter:junit-jupiter-api:$junitVersion"
+//    testRuntimeOnly "org.junit.jupiter:junit-jupiter-engine:$junitVersion"
+//    testImplementation "org.mockito:mockito-junit-jupiter:$mockitoVersion"
+//    testImplementation "org.springframework:spring-test:$springVersion"
+//    testImplementation "org.testcontainers:junit-jupiter:$testcontainersVersion"
+//    testImplementation "org.testcontainers:postgresql:$testcontainersVersion"
+}
+
+war{
+    archiveFileName = 'car-delaership-mvc.war'
+}
+
+test {
+    useJUnitPlatform()
+    testLogging {
+        events "passed", "skipped", "failed"
+    }
+}
+
+compileJava.options.encoding = 'UTF-8'

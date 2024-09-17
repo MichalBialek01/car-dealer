@@ -1,0 +1,180 @@
+<!DOCTYPE HTML>
+<html xmlns:th="http://www.thymeleaf.org">
+
+<head>
+    <meta http-equiv="Content-Type" content="text/html; charset=UTF-8"/>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.2.2/dist/css/bootstrap.min.css"
+          rel="stylesheet"
+          integrity="sha384-Zenh87qX5JnK2Jl0vWa8Ck2rdkQ2Bzep5IDxbcnCeuOxjzrPF/et3URy9Bv1WTRi"
+          crossorigin="anonymous">
+    <title> Car Dealer !</title>
+</head>
+
+<body>
+    <div class="container">
+        <h1> Car Dealer!</h1>
+    </div>
+
+    <div class="container">
+        <div class="row mt-3">
+            <div class="col-md-4">
+                <a th:href="@{/}" class="btn btn-info" role="button">Go back to the main page</a>
+            </div>
+        </div>
+
+        <br>
+        <br>
+
+        <h2>Hi mechanic!</h2>
+        <p>Check the following service requests and work on them!</p>
+
+        <table class="table">
+            <thead class="table-dark">
+            <tr>
+                <th>carServiceRequestNumber</th>
+                <th>receivedDateTime</th>
+                <th>completedDateTime</th>
+                <th>customerComment</th>
+                <th>carVin</th>
+            </tr>
+            </thead>
+            <tbody>
+            <tr th:each="serviceRequest : ${availableServiceRequestDTOs}">
+                <td th:text="${serviceRequest.carServiceRequestNumber}"></td>
+                <td th:text="${serviceRequest.receivedDateTime}"></td>
+                <td th:text="${serviceRequest.completedDateTime}"></td>
+                <td th:text="${serviceRequest.customerComment}"></td>
+                <td th:text="${serviceRequest.carVin}"></td>
+            </tr>
+            </tbody>
+        </table>
+
+        <p>What kind of work have you performed?</p>
+        <form action="#" th:action="@{/mechanic/workUnit}" th:object="${carServiceProcessDTO}" method="POST">
+            <div class="row mt-3">
+                <div class="col-md-6">
+                    <div class="row mt-3">
+                        <div class="col-md-6">
+                            <label for="mechanicPesel">Mechanic pesel:</label>
+                            <select id="mechanicPesel" th:field="*{mechanicPesel}">
+                                <option th:each="availableMechanicPesel : ${availableMechanicPesels}" th:value="${availableMechanicPesel}" th:text="${availableMechanicPesel}"></option>
+                            </select>
+                        </div>
+                        <div class="col-md-6">
+                            <label for="carVin">Car VIN:</label>
+                            <select id="carVin" th:field="*{carVin}">
+                                <option th:each="availableCarVin : ${availableCarVins}" th:value="${availableCarVin}" th:text="${availableCarVin}"></option>
+                            </select>
+                        </div>
+                    </div>
+                    <div class="row mt-3">
+                        <div class="col-md-6">
+                            <label for="partSerialNumber">Part serial number:</label>
+                            <select id="partSerialNumber" th:field="*{partSerialNumber}">
+                                <option th:each="partSerialNumber : ${partSerialNumbers}" th:value="${partSerialNumber}" th:text="${partSerialNumber}"></option>
+                            </select>
+                        </div>
+                        <div class="col-md-6">
+                            <div class="row mt-3">
+                                <div class="col-md-3">
+                                    <label for="partQuantity">Quantity:</label>
+                                </div>
+                                <div class="col-md-3">
+                                    <input type="text" id="partQuantity" th:field="*{partQuantity}"/>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="row mt-3">
+                        <div class="col-md-6">
+                            <label for="serviceCode">Service code:</label>
+                            <select id="serviceCode" th:field="*{serviceCode}">
+                                <option th:each="serviceCode : ${serviceCodes}" th:value="${serviceCode}" th:text="${serviceCode}"></option>
+                            </select>
+                        </div>
+                        <div class="col-md-6">
+                            <div class="row mt-3">
+                                <div class="col-md-3">
+                                    <label for="hours">Hours:</label>
+                                </div>
+                                <div class="col-md-3">
+                                    <input type="text" id="hours" th:field="*{hours}"/>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="row mt-3">
+                        <div class="col-md-3">
+                            <label for="mechanicComment">Mechanic comment:</label>
+                        </div>
+                        <div class="col-md-3">
+                            <textarea id="mechanicComment" th:field="*{mechanicComment}" rows="10" cols="50" required="required"></textarea>
+                        </div>
+                    </div>
+                    <div class="row mt-3">
+                        <div class="col-md-3">
+                            <p>Done?</p>
+                        </div>
+                        <div class="col-md-3">
+                            <label for="doneYes">YES</label>
+                            <input type="radio" id="doneYes" value="true" th:field="*{done}">
+                        </div>
+                        <div class="col-md-3">
+                            <label for="doneNo">NO</label>
+                            <input type="radio" id="doneNo" value="false" th:field="*{done}">
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="row mt-3">
+                <div class="col-md-4">
+                    <input type="submit" value="GO!" class="btn btn-success">
+                </div>
+            </div>
+        </form>
+
+        <br>
+        <br>
+        <br>
+
+        <h3>Available parts</h3>
+        <table class="table">
+            <thead class="table-dark">
+            <tr>
+                <th>serialNumber</th>
+                <th>description</th>
+                <th>price</th>
+            </tr>
+            </thead>
+            <tbody>
+            <tr th:each="part : ${partDTOs}">
+                <td th:text="${part.serialNumber}"></td>
+                <td th:text="${part.description}"></td>
+                <td th:text="${part.price}"></td>
+            </tr>
+            </tbody>
+        </table>
+        <br>
+        <br>
+
+        <h3>Available services</h3>
+        <table class="table">
+            <thead class="table-dark">
+            <tr>
+                <th>serviceCode</th>
+                <th>description</th>
+                <th>price</th>
+            </tr>
+            </thead>
+            <tbody>
+            <tr th:each="service : ${serviceDTOs}">
+                <td th:text="${service.serviceCode}"></td>
+                <td th:text="${service.description}"></td>
+                <td th:text="${service.price}"></td>
+            </tr>
+            </tbody>
+        </table>
+
+    </div>
+</body>
+</html>
