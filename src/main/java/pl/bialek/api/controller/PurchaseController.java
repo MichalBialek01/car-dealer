@@ -25,7 +25,7 @@ import java.util.stream.Stream;
 @RequiredArgsConstructor
 public class PurchaseController {
 
-    public static final String PURCHASE = "/purchase";
+    static final String PURCHASE = "/purchase";
 
 
     private final CarPurchaseService carPurchaseService;

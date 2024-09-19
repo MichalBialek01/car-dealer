@@ -15,7 +15,7 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
 /*
 onConstructor = @__(@Autowired) - mówi, że towrzony jest konstruktor, który jest oznaczony jako @Autowired
  */
-class HomeControllerTest {
+class HomeControllerWebMvcTest {
     private MockMvc mockMvc;
 //    Symuluje wysyałanie requesta
 
