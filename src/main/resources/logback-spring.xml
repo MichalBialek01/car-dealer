@@ -1,0 +1,20 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<configuration>
+    <include resource="org/springframework/boot/logging/logback/defaults.xml"/>
+    <root level="info">
+        <appender-ref ref="CONSOLE"/>
+    </root>
+
+    <springProfile name="prod">
+        <root level="INFO">
+            <appender-ref ref="CONSOLE/"/>
+        </root>
+    </springProfile>
+
+    <springProfile name="local | dev ">
+        <root level="DEBUG">
+            <appender-ref ref="CONSOLE/>"/>
+        </root>
+    </springProfile>
+
+</configuration>
