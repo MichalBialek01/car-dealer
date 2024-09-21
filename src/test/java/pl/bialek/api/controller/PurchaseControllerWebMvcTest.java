@@ -35,10 +35,8 @@ class PurchaseControllerWebMvcTest {
     private CarPurchaseRequestDtoMapper carPurchaseRequestDtoMapper;
     @MockBean
     private CarDtoMapper carDtoMapper;
-
-
     @Test
-    void carPurchaseWorksCorrectly() throws Exception {
+    void carPurchaseWorksCorrectlyForNewCostumer() throws Exception {
         // given
         LinkedMultiValueMap<String, String> parameters = new LinkedMultiValueMap<>();
         CarPurchaseRequestDTO.buildDefaultCustomer().asMap().forEach(parameters::add);
@@ -52,7 +50,7 @@ class PurchaseControllerWebMvcTest {
                 .andExpect(model().attributeExists("invoiceNumber"))
                 .andExpect(model().attributeExists("customerName"))
                 .andExpect(model().attributeExists("customerSurname"))
-                .andExpect(view().name("car_purchase_done"));
+                .andExpect(view().name("car_purchase_processed"));
     }
 
     @Test

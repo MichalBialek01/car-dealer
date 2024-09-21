@@ -9,7 +9,7 @@ values ('Adam', 'Klucz', '74030467120'),
        ('Paweł', 'Naprawczy', '85040567124'),
        ('Grzegorz', 'Wymieniacz', '69122398345');
 
-insert into CAR_TO_BUY (vin, brand, model, year, color, price)
+insert into CAR_TO_BUY (vin, brand, model, production_year , color, price)
 values ('WBA5A7C50FD737019', 'Audi', 'A4', '2021', 'white', '25000'),
        ('WAUBFAFLXCA416702', 'Audi', 'A6', '2021', 'silver', '35000'),
        ('WBA4F9C58ED723938', 'Audi', 'A6', '2021', 'silver', '35000'),

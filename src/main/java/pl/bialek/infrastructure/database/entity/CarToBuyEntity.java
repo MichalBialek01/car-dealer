@@ -30,7 +30,7 @@ public class CarToBuyEntity {
     @Column(name = "model")
     private String model;
 
-    @Column(name = "year")
+    @Column(name = "production_year")
     private Integer year;
 
     @Column(name = "color")

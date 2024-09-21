@@ -19,6 +19,7 @@ import pl.bialek.domain.Salesman;
 
 import java.util.List;
 import java.util.Map;
+import java.util.Objects;
 import java.util.stream.Stream;
 
 @Controller
@@ -70,7 +71,8 @@ public class PurchaseController {
         CarPurchaseRequest carPurchaseRequest = carPurchaseRequestDtoMapper.mapFromDTO(carPurchaseRequestDTO);
         Invoice invoice = carPurchaseService.purchase(carPurchaseRequest);
 
-        if(!carPurchaseRequestDTO.getExistingCustomerEmail().isBlank()){
+        if(     Objects.nonNull(carPurchaseRequestDTO.getExistingCustomerEmail()) &&
+                !carPurchaseRequestDTO.getExistingCustomerEmail().isBlank()){
             model.addAttribute("existingCustomerEmail",carPurchaseRequestDTO.getExistingCustomerEmail());
         }else{
             model.addAttribute("customerName", carPurchaseRequestDTO.getCustomerName());
