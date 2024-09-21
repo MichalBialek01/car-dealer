@@ -14,8 +14,10 @@ CREATE TABLE car_dealership_authority
 
 CREATE TABLE car_dealership_user_authority
 (
-    user_id      INT NOT NULL PRIMARY KEY ,
-    authority_id INT NOT NULL PRIMARY KEY ,
+    user_id      INT NOT NULL,
+    authority_id INT NOT NULL,
+
+    PRIMARY KEY (user_id, authority_id),
 
     CONSTRAINT fk_car_dealership_user_authority_user
         FOREIGN KEY (user_id)

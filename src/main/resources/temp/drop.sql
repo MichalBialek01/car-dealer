@@ -10,4 +10,8 @@ DROP TABLE IF EXISTS car_to_buy CASCADE;
 DROP TABLE IF EXISTS customer CASCADE;
 DROP TABLE IF EXISTS address CASCADE;
 DROP TABLE IF EXISTS salesman CASCADE;
+DROP TABLE IF EXISTS car_dealership_user_authority CASCADE;
+DROP TABLE IF EXISTS car_dealership_user CASCADE;
+DROP TABLE IF EXISTS car_dealership_authority CASCADE;
+
 DROP TABLE IF EXISTS flyway_schema_history CASCADE;

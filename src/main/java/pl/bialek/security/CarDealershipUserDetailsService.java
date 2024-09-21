@@ -19,8 +19,8 @@ public class CarDealershipUserDetailsService implements UserDetailsService {
 
     private final UserJpaRepository userJpaRepository;
     @Override
-    public UserDetails loadUserByUsername(String username) throws UsernameNotFoundException {
-        UserEntity user = userJpaRepository.findByUserName(username);
+    public UserDetails loadUserByUsername(String userName) throws UsernameNotFoundException {
+        UserEntity user = userJpaRepository.findByUserName(userName);
         List<GrantedAuthority> authorities = getUserAuthority(user.getAuthorities());
         return buildUserForAuthentication(user, authorities);
     }
@@ -35,7 +35,7 @@ public class CarDealershipUserDetailsService implements UserDetailsService {
 
     private UserDetails buildUserForAuthentication(UserEntity user, List<GrantedAuthority> authorities) {
         return new User(
-                user.getUsername(),
+                user.getUserName(),
                 user.getPassword(),
                 user.getActive(),
                 true,

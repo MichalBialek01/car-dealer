@@ -33,7 +33,7 @@ public class UserEntity {
 
     @Column(name = "user_name")
     @Length(min = 5)
-    private String username;
+    private String userName;
 
     @Column(name = "email")
     private String email;
