@@ -1,5 +1,6 @@
 package pl.bialek.api.controller;
 
+import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.ModelMap;
@@ -60,14 +61,9 @@ public class PurchaseController {
     }
     @PostMapping(value = PURCHASE)
     public String makePurchase(
-            @ModelAttribute("CarPurchaseRequestDTO") CarPurchaseRequestDTO carPurchaseRequestDTO,
-            BindingResult bindingResult,
+            @Valid @ModelAttribute("CarPurchaseRequestDTO") CarPurchaseRequestDTO carPurchaseRequestDTO,
             ModelMap model
     ) {
-        if(bindingResult.hasErrors()){
-            bindingResult.getAllErrors().forEach(error -> System.out.println(error));
-            return "error";
-        }
         CarPurchaseRequest carPurchaseRequest = carPurchaseRequestDtoMapper.mapFromDTO(carPurchaseRequestDTO);
         Invoice invoice = carPurchaseService.purchase(carPurchaseRequest);
 

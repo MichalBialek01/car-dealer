@@ -2,11 +2,16 @@ package pl.bialek.api.controller;
 
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.HttpStatus;
+import org.springframework.validation.BindException;
+import org.springframework.validation.FieldError;
 import org.springframework.web.bind.annotation.ControllerAdvice;
 import org.springframework.web.bind.annotation.ExceptionHandler;
 import org.springframework.web.bind.annotation.ResponseStatus;
 import org.springframework.web.servlet.ModelAndView;
 import pl.bialek.domain.exception.ProcessingException;
+
+import java.util.Optional;
+
 
 @Slf4j
 @ControllerAdvice
@@ -30,5 +35,19 @@ public class GlobalExceptionHandler {
         modelView.addObject("errorMessage", message);
         return modelView;
     }
+
+    @ExceptionHandler(BindException.class)
+    @ResponseStatus(HttpStatus.BAD_REQUEST)
+    public ModelAndView handleException(BindException bindException) {
+         String errorMessage = String.format("Bad request for field: {%s}, wrong value: {%s}",
+                 Optional.ofNullable(bindException.getFieldError()).map(FieldError::getField).orElse(null),
+                 Optional.ofNullable(bindException.getFieldError()).map(FieldError::getRejectedValue).orElse(null)
+                 );
+         log.error(errorMessage,bindException);
+         ModelAndView modelAndView = new ModelAndView("error");
+         modelAndView.addObject("errorMessage",errorMessage);
+         return modelAndView;
+    }
+
 
 }

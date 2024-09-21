@@ -1,5 +1,8 @@
 package pl.bialek.api.dto;
 
+import jakarta.validation.constraints.Email;
+import jakarta.validation.constraints.Pattern;
+import jakarta.validation.constraints.Size;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
@@ -16,11 +19,14 @@ import static java.util.Optional.ofNullable;
 @AllArgsConstructor
 public class CarPurchaseRequestDTO {
 
+    @Email
     private String existingCustomerEmail;
-
     private String customerName;
     private String customerSurname;
+    @Email
     private String customerEmail;
+    @Size
+    @Pattern(regexp = "^[+]\\d{2}\\s\\d{3}\\s\\d{3}\\s\\d{3}$")
     private String customerPhone;
     private String customerAddressCountry;
     private String customerAddressCity;
