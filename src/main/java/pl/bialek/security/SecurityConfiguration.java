@@ -57,6 +57,7 @@ public class SecurityConfiguration {
                         .requestMatchers("/login", "/error", "/images/oh_no.png").permitAll()
                         .requestMatchers("/employees/**", "/images/**").hasAnyAuthority("USER", "ADMIN")
                         .requestMatchers(HttpMethod.DELETE).hasAuthority("ADMIN")
+                        .requestMatchers("/api/").hasAnyAuthority("REST_API")
                 )
                 .formLogin(AbstractAuthenticationFilterConfigurer::permitAll)
                 .logout(logout -> logout

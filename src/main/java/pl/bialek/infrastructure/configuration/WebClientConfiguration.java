@@ -9,6 +9,9 @@ import org.springframework.http.codec.json.Jackson2JsonDecoder;
 import org.springframework.http.codec.json.Jackson2JsonEncoder;
 import org.springframework.web.reactive.function.client.ExchangeStrategies;
 import org.springframework.web.reactive.function.client.WebClient;
+import pl.bialek.infrastructure.cepik.ApiClient;
+import pl.bialek.infrastructure.cepik.api.PojazdyApi;
+import pl.bialek.infrastructure.cepik.api.SownikiApi;
 
 @Configuration
 public class WebClientConfiguration {
@@ -33,6 +36,23 @@ public class WebClientConfiguration {
         return WebClient.builder()
                 .exchangeStrategies(strategies)
                 .build();
+    }
+
+    @Bean
+    public ApiClient apiClient(final WebClient webClient) {
+        ApiClient apiClient = new ApiClient(webClient);
+        apiClient.setBasePath(cepikUrl);
+        return apiClient;
+    }
+
+    @Bean
+    public SownikiApi sownikiApi(final ApiClient apiClient) {
+        return new SownikiApi(apiClient);
+    }
+
+    @Bean
+    public PojazdyApi pojazdyApi(final ApiClient apiClient) {
+        return new PojazdyApi(apiClient);
     }
 
 }
