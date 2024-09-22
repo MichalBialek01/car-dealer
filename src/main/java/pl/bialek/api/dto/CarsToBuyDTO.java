@@ -1,0 +1,16 @@
+package pl.bialek.api.dto;
+
+import jdk.jfr.BooleanFlag;
+import lombok.AllArgsConstructor;
+import lombok.Builder;
+import lombok.Data;
+import lombok.NoArgsConstructor;
+
+import java.util.List;
+
+@Data
+@Builder
+@NoArgsConstructor
+@AllArgsConstructor
+public class CarsToBuyDTO {
+    private List<CarToBuyDTO> carsToBuy;}
