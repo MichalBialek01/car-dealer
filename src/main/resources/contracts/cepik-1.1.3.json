@@ -1,0 +1,2609 @@
+{
+  "swagger": "2.0",
+  "info": {
+    "description": "Niniejsza dokumentacja zawiera opis wszystkich dostępnych metod w API, ich parametrów wejściowych i komunikatów wyjściowych.\n\nJeżeli masz trudności w korzystaniu z tej dokumentacji, np. jesteś osobą z niepełnosprawnością, otwórz https://api.cepik.gov.pl/swagger/apicepik.json w ulubionym narzędziu obsługującym dokumentację w standardzie OpenAPI.",
+    "version": "1.1.3",
+    "title": "Dokumentacja API do CEPiK (version: beta)"
+  },
+  "tags": [
+    {
+      "name": "Pojazdy",
+      "description": "Metody udostępniające dane pojazdów z bazy CEPiK."
+    },
+    {
+      "name": "Pliki",
+      "description": "Metody udostępniające informacje o plikach zawierających dane pojazdów z bazy CEPiK."
+    },
+    {
+      "name": "Prawa jazdy",
+      "description": "Metody udostępniające informacje o ilości wydanych praw jazdy."
+    },
+    {
+      "name": "Uprawnienia do kierowania pojazdami",
+      "description": "Metody udostępniające informacje o ilości nadanych uprawnień do kierowania pojazdami."
+    },
+    {
+      "name": "Słowniki",
+      "description": "Metody udostępniające informacje o słownikach."
+    },
+    {
+      "name": "Statystyki",
+      "description": "Metody udostępniające statystyki użycia API."
+    },
+    {
+      "name": "Wersje",
+      "description": "Metody udostępniające informacje o wersjach API."
+    }
+  ],
+  "paths": {
+    "/uprawnienia": {
+      "get": {
+        "tags": [
+          "Uprawnienia do kierowania pojazdami"
+        ],
+        "summary": "",
+        "description": "Metoda udostępniająca miesięczne statystyki ilości nadanych uprawnień do kierowania pojazdami grupom kierowców.\r\n\nMetoda udostępnia mechanizm filtrowania w postaci parametru: **filter[\\<nazwa atrybutu\\>]=\\<szukana wartość\\>**. Znakiem operacji filtrowania jest znak równości **\"=\"**. Parametr może być podany wielokrotnie.\r\n\\<**nazwa atrybutu**\\> powinna być prawidłową nazwą jednego z atrybutów zawartych w danych statystyki. Parametr jest opcjonalny.\r\n\nPrzykładowe wykorzystania:\r\n\nStatystyki z województwa wielkopolskiego - ilość nadanych mężczyznom uprawnień do kierowania pojazdami o kategorii B.\r\n\r\n    GET /uprawnienia?filter[plec]=M&filter[wojewodztwo-kod]=30&filter[kod-uprawnienia]=B    \r\n",
+        "operationId": "getListaUprawnien",
+        "produces": [
+          "application/json"
+        ],
+        "parameters": [
+          {
+            "name": "fields",
+            "in": "query",
+            "description": "Parametr mechanizmu wyboru pól. Jako wartość przyjmuje nazwy atrybutów rozdzielone przecinkiem.\nUsługa zwróci tylko atrybuty statystyki określone w żądaniu. Parametr jest opcjonalny.",
+            "required": false,
+            "type": "array",
+            "items": {
+              "type": "string"
+            },
+            "collectionFormat": "multi"
+          },
+          {
+            "name": "limit",
+            "in": "query",
+            "description": "Parametr mechanizmu stronicowania określający ilość wyników na stronie.\nJest to dodatnia liczba całkowita podawana z kluczem parametru.\nDomyślna wartość → 100, Maksymalna wartość → 500.",
+            "required": false,
+            "type": "string",
+            "default": "100"
+          },
+          {
+            "name": "page",
+            "in": "query",
+            "description": "Parametr mechanizmu stronicowania określający, którą stronę wyników chce pobrać użytkownik.\nJest to dodatnia liczba całkowita podawana z kluczem parametru. Domyślna wartość → 1.",
+            "required": false,
+            "type": "string",
+            "default": "1"
+          },
+          {
+            "name": "sort",
+            "in": "query",
+            "description": "Parametr mechanizmu sortowania. Jako wartość przyjmuje nazwy atrybutów rozdzielone przecinkiem.\nKolejność podanych atrybutów określa kolejność sortowania.\nAby posortować w odwrotnej kolejności należy poprzedzić nazwę parametru znakiem minus. Parametr jest opcjonalny.",
+            "required": false,
+            "type": "array",
+            "items": {
+              "type": "string"
+            },
+            "collectionFormat": "multi"
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "OK",
+            "schema": {
+              "$ref": "#/definitions/JsonApiForListDrivingPermission"
+            },
+            "headers": {
+              "X-Rate-Limit-Remaining": {
+                "schema": {
+                  "type": "integer"
+                },
+                "description": "Szacunkowy pozostały limit wywołań usługi dla adresu IP w jednostce czasu."
+              }
+            }
+          },
+          "400": {
+            "description": "Bad Request",
+            "schema": {
+              "$ref": "#/definitions/error"
+            }
+          }
+        },
+        "deprecated": false
+      }
+    },
+    "/uprawnienia/{id}": {
+      "get": {
+        "tags": [
+          "Uprawnienia do kierowania pojazdami"
+        ],
+        "summary": "",
+        "description": "Metoda udostępnia informację o ilości nadanych uprawnień do kierowania pojazdami w zadanym miesiącu, kierowcom o określonych cechach.",
+        "operationId": "getUprawnienia",
+        "produces": [
+          "application/json"
+        ],
+        "parameters": [
+          {
+            "name": "id",
+            "in": "path",
+            "description": "Identyfikator statystyki. Ma postać \"YYYY-MM,WOJ,UPR,P,WIEK\", gdzie \nYYYY-MM - rok i miesiąc statystyki,\nWOJ - kod teryt województwa,\nUPR - kod kategorii uprawnienia, np. A, B ,B1, C i rd.,\nP - płeć (K - kobiety, M - mężczyźni),\nWIEK - wiek kierowcy wyrażony liczbą naturalną.\n\nPrzykład: 2019-08,02,K,28",
+            "required": true,
+            "type": "string"
+          },
+          {
+            "name": "fields",
+            "in": "query",
+            "description": "Parametr mechanizmu wyboru pól. Jako wartość przyjmuje nazwy atrybutów rozdzielone przecinkiem.\nUsługa zwróci tylko atrybuty statystyki określone w żądaniu. Parametr jest opcjonalny.",
+            "required": false,
+            "type": "array",
+            "items": {
+              "type": "string"
+            },
+            "collectionFormat": "multi"
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "OK",
+            "schema": {
+              "$ref": "#/definitions/JsonApiForObjectDrivingPermission"
+            },
+            "headers": {
+              "X-Rate-Limit-Remaining": {
+                "schema": {
+                  "type": "integer"
+                },
+                "description": "Szacunkowy pozostały limit wywołań usługi dla adresu IP w jednostce czasu."
+              }
+            }
+          },
+          "400": {
+            "description": "Bad Request",
+            "schema": {
+              "$ref": "#/definitions/error"
+            }
+          }
+        },
+        "deprecated": false
+      }
+    },
+    "/prawa-jazdy": {
+      "get": {
+        "tags": [
+          "Prawa jazdy"
+        ],
+        "summary": "",
+        "description": "Metoda udostępniająca miesięczne statystyki ilości wydań praw jazdy grupom kierowców.\r\n\nMetoda udostępnia mechanizm filtrowania w postaci parametru: **filter[\\<nazwa atrybutu\\>]=\\<szukana wartość\\>**. Znakiem operacji filtrowania jest znak równości **\"=\"**. Parametr może być podany wielokrotnie.\r\n\\<**nazwa atrybutu**\\> powinna być prawidłową nazwą jednego z atrybutów zawartych w danych statystyki. Parametr jest opcjonalny.\r\n\nPrzykładowe wykorzystania:\r\n\nStatystyki z województwa wielkopolskiego - ilość praw jazdy wydanych kobietom.\r\n\r\n    GET /prawa-jazdy?filter[plec]=K&filter[wojewodztwo-kod]=30    \r\n",
+        "operationId": "getListaPrawJazdy",
+        "produces": [
+          "application/json"
+        ],
+        "parameters": [
+          {
+            "name": "fields",
+            "in": "query",
+            "description": "Parametr mechanizmu wyboru pól. Jako wartość przyjmuje nazwy atrybutów rozdzielone przecinkiem.\nUsługa zwróci tylko atrybuty statystyki określone w żądaniu. Parametr jest opcjonalny.",
+            "required": false,
+            "type": "array",
+            "items": {
+              "type": "string"
+            },
+            "collectionFormat": "multi"
+          },
+          {
+            "name": "limit",
+            "in": "query",
+            "description": "Parametr mechanizmu stronicowania określający ilość wyników na stronie.\nJest to dodatnia liczba całkowita podawana z kluczem parametru.\nDomyślna wartość → 100, Maksymalna wartość → 500.",
+            "required": false,
+            "type": "string",
+            "default": "100"
+          },
+          {
+            "name": "page",
+            "in": "query",
+            "description": "Parametr mechanizmu stronicowania określający, którą stronę wyników chce pobrać użytkownik.\nJest to dodatnia liczba całkowita podawana z kluczem parametru. Domyślna wartość → 1.",
+            "required": false,
+            "type": "string",
+            "default": "1"
+          },
+          {
+            "name": "sort",
+            "in": "query",
+            "description": "Parametr mechanizmu sortowania. Jako wartość przyjmuje nazwy atrybutów rozdzielone przecinkiem.\nKolejność podanych atrybutów określa kolejność sortowania.\nAby posortować w odwrotnej kolejności należy poprzedzić nazwę parametru znakiem minus. Parametr jest opcjonalny.",
+            "required": false,
+            "type": "array",
+            "items": {
+              "type": "string"
+            },
+            "collectionFormat": "multi"
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "OK",
+            "schema": {
+              "$ref": "#/definitions/JsonApiForListDrivingLicense"
+            },
+            "headers": {
+              "X-Rate-Limit-Remaining": {
+                "schema": {
+                  "type": "integer"
+                },
+                "description": "Szacunkowy pozostały limit wywołań usługi dla adresu IP w jednostce czasu."
+              }
+            }
+          },
+          "400": {
+            "description": "Bad Request",
+            "schema": {
+              "$ref": "#/definitions/error"
+            }
+          }
+        },
+        "deprecated": false
+      }
+    },
+    "/prawa-jazdy/{id}": {
+      "get": {
+        "tags": [
+          "Prawa jazdy"
+        ],
+        "summary": "",
+        "description": "Metoda udostępnia informację o ilości wydań praw jazdy w zadanym miesiącu, kierowcom o określonych cechach.",
+        "operationId": "getPrawaJazdy",
+        "produces": [
+          "application/json"
+        ],
+        "parameters": [
+          {
+            "name": "id",
+            "in": "path",
+            "description": "Identyfikator statystyki. Ma postać \"YYYY-MM,WOJ,P,WIEK\", gdzie \nYYYY-MM - rok i miesiąc statystyki,\nWOJ - kod teryt województwa,\nP - płeć (K - kobiety, M - mężczyźni),\nWIEK - wiek kierowcy wyrażony liczbą naturalną.\n\nPrzykład: 2019-08,02,K,28",
+            "required": true,
+            "type": "string"
+          },
+          {
+            "name": "fields",
+            "in": "query",
+            "description": "Parametr mechanizmu wyboru pól. Jako wartość przyjmuje nazwy atrybutów rozdzielone przecinkiem.\nUsługa zwróci tylko atrybuty statystyki określone w żądaniu. Parametr jest opcjonalny.",
+            "required": false,
+            "type": "array",
+            "items": {
+              "type": "string"
+            },
+            "collectionFormat": "multi"
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "OK",
+            "schema": {
+              "$ref": "#/definitions/JsonApiForObjectDrivingLicense"
+            },
+            "headers": {
+              "X-Rate-Limit-Remaining": {
+                "schema": {
+                  "type": "integer"
+                },
+                "description": "Szacunkowy pozostały limit wywołań usługi dla adresu IP w jednostce czasu."
+              }
+            }
+          },
+          "400": {
+            "description": "Bad Request",
+            "schema": {
+              "$ref": "#/definitions/error"
+            }
+          }
+        },
+        "deprecated": false
+      }
+    },
+    "/pliki": {
+      "get": {
+        "tags": [
+          "Pliki"
+        ],
+        "summary": "",
+        "description": "Metoda udostępnia informacje o plikach zawierających dane pojazdów z bazy CEPiK.",
+        "operationId": "getListaPlikow",
+        "produces": [
+          "application/json"
+        ],
+        "parameters": [
+          {
+            "name": "limit",
+            "in": "query",
+            "description": "Parametr mechanizmu stronicowania określający ilość plików na stronie.\nJest to dodatnia liczba całkowita podawana z kluczem parametru.\nDomyślna wartość → 100, Maksymalna wartość → 500.",
+            "required": false,
+            "type": "string",
+            "default": "100"
+          },
+          {
+            "name": "page",
+            "in": "query",
+            "description": "Parametr mechanizmu stronicowania określający, którą stronę listy plików chce pobrać użytkownik.\nJest to dodatnia liczba całkowita podawana z kluczem parametru. Domyślna wartość → 1.",
+            "required": false,
+            "type": "string",
+            "default": "1"
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "OK",
+            "schema": {
+              "$ref": "#/definitions/JsonApiForListFile"
+            },
+            "headers": {
+              "X-Rate-Limit-Remaining": {
+                "schema": {
+                  "type": "integer"
+                },
+                "description": "Szacunkowy pozostały limit wywołań usługi dla adresu IP w jednostce czasu."
+              }
+            }
+          },
+          "400": {
+            "description": "Bad Request",
+            "schema": {
+              "$ref": "#/definitions/error"
+            }
+          }
+        },
+        "deprecated": false
+      }
+    },
+    "/pliki/{id}": {
+      "get": {
+        "tags": [
+          "Pliki"
+        ],
+        "summary": "",
+        "description": "Metoda udostępnia informacje o pliku zawierającym dane o pojazdach z bazy CEPiK.",
+        "operationId": "getPlik",
+        "produces": [
+          "application/json"
+        ],
+        "parameters": [
+          {
+            "name": "id",
+            "in": "path",
+            "description": "Identyfikator zasobu plikowego. Parametr jest wymagany.",
+            "required": true,
+            "type": "string"
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "OK",
+            "schema": {
+              "$ref": "#/definitions/JsonApiForObjectFile"
+            },
+            "headers": {
+              "X-Rate-Limit-Remaining": {
+                "schema": {
+                  "type": "integer"
+                },
+                "description": "Szacunkowy pozostały limit wywołań usługi dla adresu IP w jednostce czasu."
+              }
+            }
+          },
+          "400": {
+            "description": "Bad Request",
+            "schema": {
+              "$ref": "#/definitions/error"
+            }
+          }
+        },
+        "deprecated": false
+      }
+    },
+    "/pojazdy": {
+      "get": {
+        "tags": [
+          "Pojazdy"
+        ],
+        "summary": "",
+        "description": "Metoda udostępniająca listę pojazdów z bazy CEPiK.\r\n\nMetoda udostępnia mechanizm filtrowania w postaci parametru: **filter[\\<nazwa atrybutu\\>]=\\<szukana wartość\\>**. Znakiem operacji filtrowania jest znak równości **\"=\"**. Parametr może być podany wielokrotnie.\r\n\\<**nazwa atrybutu**\\> powinna być prawidłową nazwą jednego z atrybutów zawartych w danych technicznych pojazdu. Parametr jest opcjonalny.\r\n\nPrzykładowe wykorzystania:\r\n\nPojazdy z województwa wielkopolskiego, zarejestrowane po raz I w Polsce w 2019r.\r\n\r\n    GET /pojazdy?wojewodztwo=30&data-od=20190101&data-do=20191231    \r\nPojazdy o modelu JUMPER z województwa mazowieckiego, zarejestrowane po raz I w Polsce między 2016-01-01 a 2018-12-01r.\r\n\r\n    GET /pojazdy?wojewodztwo=14&data-od=20160101&data-do=20181201&filter[model]=JUMPER    \r\nPojazdy z województwa dolnośląskiego, których data ostatniej rejestracji mieści się w przedziale 2018-01-01 - 2019-12-31r.\r\n\r\n    GET /pojazdy?wojewodztwo=02&data-od=20180101&data-do=20191231&typ-daty=2    \r\n",
+        "operationId": "getListaPojazdow",
+        "produces": [
+          "application/json"
+        ],
+        "parameters": [
+          {
+            "name": "wojewodztwo",
+            "in": "query",
+            "description": "Kod teryt województwa, w którym zarejestrowane jest auto lub, w przypadku wyrejestrowanych aut, było ostatnio zarejestrowane.\nParametr jest wymagany. Kody teryt znajdziesz w usłudze /słowniki.",
+            "required": true,
+            "type": "string"
+          },
+          {
+            "name": "data-od",
+            "in": "query",
+            "description": "Wymagany parametr daty podawany w formacie YYYYMMDD.\nOkreśla datę początkową okresu pierwszej lub ostatniej rejestracji w kraju (domyślnie pierwszej), dla którego zostaną udostępnione informacje o pojazdach.",
+            "required": true,
+            "type": "string"
+          },
+          {
+            "name": "data-do",
+            "in": "query",
+            "description": "Parametr daty podawany w formacie YYYYMMDD.\nOkreśla koniec okresu, dla którego pojazdy mają być zwrócone.\nDomyślną wartością jest data bieżąca.\nMaksymalny zakres dat to 2 lata.",
+            "required": false,
+            "type": "string"
+          },
+          {
+            "name": "typ-daty",
+            "in": "query",
+            "description": "Parametr określający jakiej daty dotyczy warunek wyszukiwania określony parametrami data-od i data-do.\n W przypadku nie podania parametru, przyjęta zostanie wartość domyślna.\n1 (domyślna wartość) - data pierwszej rejestracji pojazdu w Polsce,\n2 - data ostatniej rejestracji pojazdu.",
+            "required": false,
+            "type": "string",
+            "default": "1"
+          },
+          {
+            "name": "tylko-zarejestrowane",
+            "in": "query",
+            "description": "Parametr określający czy mają zostać zwrócone dane tylko pojazdów zarejestrowanych. Domyślną wartością jest, że tak.",
+            "required": false,
+            "type": "boolean",
+            "default": true
+          },
+          {
+            "name": "pokaz-wszystkie-pola",
+            "in": "query",
+            "description": "Parametr określający czy mają zostać zwrócone wszystkie pola w zwróconych danych technicznych pojazdów.\nDomyślną wartością jest, że nie. Parametr ten jest ignorowany w przypadku podania jednocześnie parametru fields.",
+            "required": false,
+            "type": "boolean",
+            "default": false
+          },
+          {
+            "name": "fields",
+            "in": "query",
+            "description": "Parametr mechanizmu wyboru pól. Jako wartość przyjmuje nazwy atrybutów rozdzielone przecinkiem.\nUsługa zwróci tylko dane techniczne pojazdów określone podanymi atrybutami. Parametr jest opcjonalny.",
+            "required": false,
+            "type": "array",
+            "items": {
+              "type": "string"
+            },
+            "collectionFormat": "multi"
+          },
+          {
+            "name": "limit",
+            "in": "query",
+            "description": "Parametr mechanizmu stronicowania określający ilość wyników na stronie.\nJest to dodatnia liczba całkowita podawana z kluczem parametru.\nDomyślna wartość → 100, Maksymalna wartość → 500.",
+            "required": false,
+            "type": "string",
+            "default": "100"
+          },
+          {
+            "name": "page",
+            "in": "query",
+            "description": "Parametr mechanizmu stronicowania określający, którą stronę wyników chce pobrać użytkownik.\nJest to dodatnia liczba całkowita podawana z kluczem parametru. Domyślna wartość → 1.",
+            "required": false,
+            "type": "string",
+            "default": "1"
+          },
+          {
+            "name": "sort",
+            "in": "query",
+            "description": "Parametr mechanizmu sortowania. Jako wartość przyjmuje nazwy atrybutów rozdzielone przecinkiem.\nKolejność podanych atrybutów określa kolejność sortowania.\nAby posortować w odwrotnej kolejności należy poprzedzić nazwę parametru znakiem minus. Parametr jest opcjonalny.",
+            "required": false,
+            "type": "array",
+            "items": {
+              "type": "string"
+            },
+            "collectionFormat": "multi"
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "OK",
+            "schema": {
+              "$ref": "#/definitions/JsonApiForListVehicle"
+            },
+            "headers": {
+              "X-Rate-Limit-Remaining": {
+                "schema": {
+                  "type": "integer"
+                },
+                "description": "Szacunkowy pozostały limit wywołań usługi dla adresu IP w jednostce czasu."
+              }
+            }
+          },
+          "400": {
+            "description": "Bad Request",
+            "schema": {
+              "$ref": "#/definitions/error"
+            }
+          }
+        },
+        "deprecated": false
+      }
+    },
+    "/pojazdy/{id}": {
+      "get": {
+        "tags": [
+          "Pojazdy"
+        ],
+        "summary": "",
+        "description": "Metoda udostępnia dane pojazdu z bazy CEPiK.",
+        "operationId": "getPojazd",
+        "produces": [
+          "application/json"
+        ],
+        "parameters": [
+          {
+            "name": "id",
+            "in": "path",
+            "description": "Identyfikator techniczny pojazdu. Jest to dodatnia liczba całkowita.\nUwaga: nie jest to ani VIN, ani numer rejestracyjny.",
+            "required": true,
+            "type": "string"
+          },
+          {
+            "name": "fields",
+            "in": "query",
+            "description": "Parametr mechanizmu wyboru pól. Jako wartość przyjmuje nazwy atrybutów rozdzielone przecinkiem.\nUsługa zwróci tylko dane techniczne pojazdów określone podanymi atrybutami. Parametr jest opcjonalny.",
+            "required": false,
+            "type": "array",
+            "items": {
+              "type": "string"
+            },
+            "collectionFormat": "multi"
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "OK",
+            "schema": {
+              "$ref": "#/definitions/JsonApiForObjectVehicle"
+            },
+            "headers": {
+              "X-Rate-Limit-Remaining": {
+                "schema": {
+                  "type": "integer"
+                },
+                "description": "Szacunkowy pozostały limit wywołań usługi dla adresu IP w jednostce czasu."
+              }
+            }
+          },
+          "400": {
+            "description": "Bad Request",
+            "schema": {
+              "$ref": "#/definitions/error"
+            }
+          }
+        },
+        "deprecated": false
+      }
+    },
+    "/slowniki": {
+      "get": {
+        "tags": [
+          "Słowniki"
+        ],
+        "summary": "",
+        "description": "Metoda udostępnia listę wartości dla pól, po których można wyszukiwać/filtrować zasoby udostępniane przez API do CEPIK.",
+        "operationId": "getListaSlownikow",
+        "produces": [
+          "application/json"
+        ],
+        "parameters": [
+          {
+            "name": "limit",
+            "in": "query",
+            "description": "Parametr mechanizmu stronicowania określający ilość wyników na stronie.\nJest to dodatnia liczba całkowita podawana z kluczem parametru. Domyślna wartość → 100, Maksymalna wartość → 500.",
+            "required": false,
+            "type": "string",
+            "default": "100"
+          },
+          {
+            "name": "page",
+            "in": "query",
+            "description": "Parametr mechanizmu stronicowania określający, którą stronę wyników chce pobrać użytkownik.\nJest to dodatnia liczba całkowita podawana z kluczem parametru. Domyślna wartość → 1",
+            "required": false,
+            "type": "string",
+            "default": "1"
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "OK",
+            "schema": {
+              "$ref": "#/definitions/JsonApiForListDictionary"
+            },
+            "headers": {
+              "X-Rate-Limit-Remaining": {
+                "schema": {
+                  "type": "integer"
+                },
+                "description": "Szacunkowy pozostały limit wywołań usługi dla adresu IP w jednostce czasu."
+              }
+            }
+          },
+          "400": {
+            "description": "Bad Request",
+            "schema": {
+              "$ref": "#/definitions/error"
+            }
+          }
+        },
+        "deprecated": false
+      }
+    },
+    "/slowniki/{nazwa-slownika}": {
+      "get": {
+        "tags": [
+          "Słowniki"
+        ],
+        "summary": "",
+        "description": "Metoda udostępnia wybrany słownik zawierający możliwe wartości dla danego pola.",
+        "operationId": "getSlownik",
+        "produces": [
+          "application/json"
+        ],
+        "parameters": [
+          {
+            "name": "nazwa-slownika",
+            "in": "path",
+            "description": "Nazwa słownika (np. województwa, marka).",
+            "required": true,
+            "type": "string"
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "OK",
+            "schema": {
+              "$ref": "#/definitions/JsonApiForObjectDictionary"
+            },
+            "headers": {
+              "X-Rate-Limit-Remaining": {
+                "schema": {
+                  "type": "integer"
+                },
+                "description": "Szacunkowy pozostały limit wywołań usługi dla adresu IP w jednostce czasu."
+              }
+            }
+          },
+          "400": {
+            "description": "Bad Request",
+            "schema": {
+              "$ref": "#/definitions/error"
+            }
+          }
+        },
+        "deprecated": false
+      }
+    },
+    "/statystyki": {
+      "get": {
+        "tags": [
+          "Statystyki"
+        ],
+        "summary": "",
+        "description": "Metoda udostępnia listę dostępnych statystyk użycia API do CEPIK.",
+        "operationId": "getListaStatystykGlownychZasobow",
+        "produces": [
+          "*/*"
+        ],
+        "parameters": [
+          {
+            "name": "data-od",
+            "in": "query",
+            "description": "Parametr daty podawany w formacie YYYYMMDD.\nOkreśla początek okresu, z którego statystyki mają być zwrócone.\nDomyślną datą jest D-3.",
+            "required": false,
+            "type": "string"
+          },
+          {
+            "name": "data-do",
+            "in": "query",
+            "description": "Parametr daty podawany w formacie YYYYMMDD.\nOkreśla koniec okresu, z którego statystyki mają być zwrócone.\nDomyślną wartością jest bieżąca data.",
+            "required": false,
+            "type": "string"
+          },
+          {
+            "name": "limit",
+            "in": "query",
+            "description": "Parametr mechanizmu stronicowania określający ilość wyników na stronie.\nJest to dodatnia liczba całkowita podawana z kluczem parametru.\nDomyślna wartość → 100, Maksymalna wartość → 500.",
+            "required": false,
+            "type": "string",
+            "default": "100"
+          },
+          {
+            "name": "page",
+            "in": "query",
+            "description": "Parametr mechanizmu stronicowania określający, którą stronę wyników chce pobrać użytkownik.\nJest to dodatnia liczba całkowita podawana z kluczem parametru. Domyślna wartość → 1.",
+            "required": false,
+            "type": "string",
+            "default": "1"
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "OK",
+            "schema": {
+              "$ref": "#/definitions/JsonApiForListStatistics"
+            },
+            "headers": {
+              "X-Rate-Limit-Remaining": {
+                "schema": {
+                  "type": "integer"
+                },
+                "description": "Szacunkowy pozostały limit wywołań usługi dla adresu IP w jednostce czasu."
+              }
+            }
+          },
+          "404": {
+            "description": "Not Found"
+          }
+        },
+        "deprecated": false
+      }
+    },
+    "/statystyki/pojazdy/{data-statystyki}": {
+      "get": {
+        "tags": [
+          "Statystyki"
+        ],
+        "summary": "",
+        "description": "Metoda udostępnia statystykę użycia metody /pojazdy we wskazanym dniu.",
+        "operationId": "getListaStatystykWyszukanPojazdowWDniu",
+        "produces": [
+          "*/*"
+        ],
+        "parameters": [
+          {
+            "name": "data-statystyki",
+            "in": "path",
+            "description": "Wymagany parametr daty podawany w formacie YYYYMMDD.\nOkreśla dzień, za który mają zostać zwrócone statystyki użycia metody /pojazdy.",
+            "required": true,
+            "type": "string"
+          },
+          {
+            "name": "limit",
+            "in": "query",
+            "description": "Parametr mechanizmu stronicowania określający ilość wyników na stronie.\nJest to dodatnia liczba całkowita podawana z kluczem parametru.\nDomyślna wartość → 100, Maksymalna wartość → 500.",
+            "required": false,
+            "type": "string",
+            "default": "100"
+          },
+          {
+            "name": "page",
+            "in": "query",
+            "description": "Parametr mechanizmu stronicowania określający, którą stronę wyników chce pobrać użytkownik.\nJest to dodatnia liczba całkowita podawana z kluczem parametru. Domyślna wartość → 1.",
+            "required": false,
+            "type": "string",
+            "default": "1"
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "OK",
+            "schema": {
+              "$ref": "#/definitions/JsonApiForListStatisticsVehicle"
+            },
+            "headers": {
+              "X-Rate-Limit-Remaining": {
+                "schema": {
+                  "type": "integer"
+                },
+                "description": "Szacunkowy pozostały limit wywołań usługi dla adresu IP w jednostce czasu."
+              }
+            }
+          },
+          "404": {
+            "description": "Not Found"
+          }
+        },
+        "deprecated": false
+      }
+    },
+    "/statystyki/pojazdy/{data-statystyki}/{wojewodztwo}": {
+      "get": {
+        "tags": [
+          "Statystyki"
+        ],
+        "summary": "",
+        "description": "Metoda udostępnia statystykę użycia metody /pojazdy w podziale na województwo oraz wskazany dzień.",
+        "operationId": "getStatystykiWyszukanPojazdowWWojewodztwie",
+        "produces": [
+          "*/*"
+        ],
+        "parameters": [
+          {
+            "name": "wojewodztwo",
+            "in": "path",
+            "description": "Parametr specyfikuję za jakie województwo mają zostać zwrócone statystki użycia metody /pojazdy.\nParametr wymagany.",
+            "required": true,
+            "type": "string"
+          },
+          {
+            "name": "data-statystyki",
+            "in": "path",
+            "description": "Wymagany parametr daty podawany w formacie YYYYMMDD.\nOkreśla dzień, za który mają zostać zwrócone statystyki użycia metody /pojazdy.",
+            "required": true,
+            "type": "string"
+          },
+          {
+            "name": "limit",
+            "in": "query",
+            "description": "Parametr mechanizmu stronicowania określający ilość wyników na stronie.\nJest to dodatnia liczba całkowita podawana z kluczem parametru.\nDomyślna wartość → 100, Maksymalna wartość → 500.",
+            "required": false,
+            "type": "string",
+            "default": "100"
+          },
+          {
+            "name": "page",
+            "in": "query",
+            "description": "Parametr mechanizmu stronicowania określający, którą stronę wyników chce pobrać użytkownik.\nJest to dodatnia liczba całkowita podawana z kluczem parametru. Domyślna wartość → 1.",
+            "required": false,
+            "type": "string",
+            "default": "1"
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "OK",
+            "schema": {
+              "$ref": "#/definitions/JsonApiForObjectStatisticsVehicle"
+            },
+            "headers": {
+              "X-Rate-Limit-Remaining": {
+                "schema": {
+                  "type": "integer"
+                },
+                "description": "Szacunkowy pozostały limit wywołań usługi dla adresu IP w jednostce czasu."
+              }
+            }
+          },
+          "404": {
+            "description": "Not Found"
+          }
+        },
+        "deprecated": false
+      }
+    },
+    "/statystyki/pliki": {
+      "get": {
+        "tags": [
+          "Statystyki"
+        ],
+        "summary": "",
+        "description": "Metoda udostępnia stystyki wywołań metody /pliki oraz pobrań plików zawierających listy pojazdów w wybranym zakresie dat.",
+        "operationId": "getListaStatystykPobranPlikow",
+        "produces": [
+          "*/*"
+        ],
+        "parameters": [
+          {
+            "name": "data-od",
+            "in": "query",
+            "description": "Parametr daty podawany w formacie YYYYMMDD.\nOkreśla początek okresu, z którego statystyki mają być zwrócone.\nDomyślną datą jest D-3.",
+            "required": false,
+            "type": "string"
+          },
+          {
+            "name": "data-do",
+            "in": "query",
+            "description": "Parametr daty podawany w formacie YYYYMMDD.\nOkreśla koniec okresu, z którego statystyki mają być zwrócone.\nDomyślną wartością jest bieżąca data.",
+            "required": false,
+            "type": "string"
+          },
+          {
+            "name": "limit",
+            "in": "query",
+            "description": "Parametr mechanizmu stronicowania określający ilość wyników na stronie.\nJest to dodatnia liczba całkowita podawana z kluczem parametru.\nDomyślna wartość → 100, Maksymalna wartość → 500.",
+            "required": false,
+            "type": "string",
+            "default": "100"
+          },
+          {
+            "name": "page",
+            "in": "query",
+            "description": "Parametr mechanizmu stronicowania określający, którą stronę wyników chce pobrać użytkownik.\nJest to dodatnia liczba całkowita podawana z kluczem parametru. Domyślna wartość → 1.",
+            "required": false,
+            "type": "string",
+            "default": "1"
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "OK",
+            "schema": {
+              "$ref": "#/definitions/JsonApiForListStatisticsServerWww"
+            },
+            "headers": {
+              "X-Rate-Limit-Remaining": {
+                "schema": {
+                  "type": "integer"
+                },
+                "description": "Szacunkowy pozostały limit wywołań usługi dla adresu IP w jednostce czasu."
+              }
+            }
+          },
+          "404": {
+            "description": "Not Found"
+          }
+        },
+        "deprecated": false
+      }
+    },
+    "/statystyki/pliki/{data-statystyki}": {
+      "get": {
+        "tags": [
+          "Statystyki"
+        ],
+        "summary": "",
+        "description": "Metoda udostępnia stystyki wywołań metody /pliki oraz pobrań plików zawierających listy pojazdów we wskazanym dniu.",
+        "operationId": "getListaStatystykPobranPlikowWDniu",
+        "produces": [
+          "*/*"
+        ],
+        "parameters": [
+          {
+            "name": "data-statystyki",
+            "in": "path",
+            "description": "Wymagany parametr daty podawany w formacie YYYYMMDD.\nOkreśla dzień, za który mają zostać zwrócone statystyki API.",
+            "required": true,
+            "type": "string"
+          },
+          {
+            "name": "limit",
+            "in": "query",
+            "description": "Parametr mechanizmu stronicowania określający ilość wyników na stronie.\nJest to dodatnia liczba całkowita podawana z kluczem parametru.\nDomyślna wartość → 100, Maksymalna wartość → 500.",
+            "required": false,
+            "type": "string",
+            "default": "100"
+          },
+          {
+            "name": "page",
+            "in": "query",
+            "description": "Parametr mechanizmu stronicowania określający, którą stronę wyników chce pobrać użytkownik.\nJest to dodatnia liczba całkowita podawana z kluczem parametru. Domyślna wartość → 1.",
+            "required": false,
+            "type": "string",
+            "default": "1"
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "OK",
+            "schema": {
+              "$ref": "#/definitions/JsonApiForObjectStatisticsServerWww"
+            },
+            "headers": {
+              "X-Rate-Limit-Remaining": {
+                "schema": {
+                  "type": "integer"
+                },
+                "description": "Szacunkowy pozostały limit wywołań usługi dla adresu IP w jednostce czasu."
+              }
+            }
+          },
+          "404": {
+            "description": "Not Found"
+          }
+        },
+        "deprecated": false
+      }
+    },
+    "/statystyki/pliki/{data-statystyki}/{id}": {
+      "get": {
+        "tags": [
+          "Statystyki"
+        ],
+        "summary": "",
+        "description": "Metoda udostępnia stystyki wywołań pobrań wskazanego pliku zawierającego listę pojazdów we wskazanym dniu.",
+        "operationId": "getStatystykiPobranPliku",
+        "produces": [
+          "*/*"
+        ],
+        "parameters": [
+          {
+            "name": "id",
+            "in": "path",
+            "description": "Identyfikator pliku z listą pojazdów.\nParametr Wymagany",
+            "required": true,
+            "type": "string"
+          },
+          {
+            "name": "data-statystyki",
+            "in": "path",
+            "description": "Wymagany parametr daty podawany w formacie YYYYMMDD.\nOkreśla dzień, za który mają zostać zwrócone statystyki API.",
+            "required": true,
+            "type": "string"
+          },
+          {
+            "name": "limit",
+            "in": "query",
+            "description": "Parametr mechanizmu stronicowania określający ilość wyników na stronie.\nJest to dodatnia liczba całkowita podawana z kluczem parametru.\nDomyślna wartość → 100, Maksymalna wartość → 500.",
+            "required": false,
+            "type": "string",
+            "default": "100"
+          },
+          {
+            "name": "page",
+            "in": "query",
+            "description": "Parametr mechanizmu stronicowania określający, którą stronę wyników chce pobrać użytkownik.\nJest to dodatnia liczba całkowita podawana z kluczem parametru. Domyślna wartość → 1.",
+            "required": false,
+            "type": "string",
+            "default": "1"
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "OK",
+            "schema": {
+              "$ref": "#/definitions/JsonApiForObjectStatisticsServerWww"
+            },
+            "headers": {
+              "X-Rate-Limit-Remaining": {
+                "schema": {
+                  "type": "integer"
+                },
+                "description": "Szacunkowy pozostały limit wywołań usługi dla adresu IP w jednostce czasu."
+              }
+            }
+          },
+          "404": {
+            "description": "Not Found"
+          }
+        },
+        "deprecated": false
+      }
+    },
+    "/statystyki/aktywnosc/{data-statystyki}": {
+      "get": {
+        "tags": [
+          "Statystyki"
+        ],
+        "summary": "",
+        "description": "Metoda udostępnia statystykę aktywności użycia API do CEPIK we wskazanym dniu w podziale na przedziały godzinowe.",
+        "operationId": "getListaStatystykAktywnosciGodzinowych",
+        "produces": [
+          "*/*"
+        ],
+        "parameters": [
+          {
+            "name": "data-statystyki",
+            "in": "path",
+            "description": "Wymagany parametr daty podawany w formacie YYYYMMDD.\nOkreśla dzień, za który mają zostać zwrócone statystyki aktywności użycia API.",
+            "required": true,
+            "type": "string"
+          },
+          {
+            "name": "limit",
+            "in": "query",
+            "description": "Parametr mechanizmu stronicowania określający ilość wyników na stronie.\nJest to dodatnia liczba całkowita podawana z kluczem parametru.\nDomyślna wartość → 100, Maksymalna wartość → 500.",
+            "required": false,
+            "type": "string",
+            "default": "100"
+          },
+          {
+            "name": "page",
+            "in": "query",
+            "description": "Parametr mechanizmu stronicowania określający, którą stronę wyników chce pobrać użytkownik.\nJest to dodatnia liczba całkowita podawana z kluczem parametru. Domyślna wartość → 1.",
+            "required": false,
+            "type": "string",
+            "default": "1"
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "OK",
+            "schema": {
+              "$ref": "#/definitions/JsonApiForListStatisticsActivityDaily"
+            },
+            "headers": {
+              "X-Rate-Limit-Remaining": {
+                "schema": {
+                  "type": "integer"
+                },
+                "description": "Szacunkowy pozostały limit wywołań usługi dla adresu IP w jednostce czasu."
+              }
+            }
+          },
+          "404": {
+            "description": "Not Found"
+          }
+        },
+        "deprecated": false
+      }
+    },
+    "/statystyki/aktywnosc/{data-statystyki}/{id}": {
+      "get": {
+        "tags": [
+          "Statystyki"
+        ],
+        "summary": "",
+        "description": "Metoda udostępnia statystykę aktywności użycia API do CEPIK we wskazanym przedziale godzinowym danego dnia.",
+        "operationId": "getStatystykiAktywnosciGodzinowej",
+        "produces": [
+          "*/*"
+        ],
+        "parameters": [
+          {
+            "name": "id",
+            "in": "path",
+            "description": "Identyfikator statystyki aktywnośći użycia API.\nParametr Wymagany",
+            "required": true,
+            "type": "string"
+          },
+          {
+            "name": "data-statystyki",
+            "in": "path",
+            "description": "Wymagany parametr daty podawany w formacie YYYYMMDD.\nOkreśla dzień, za który mają zostać zwrócone statystyki aktywności użycia API.",
+            "required": true,
+            "type": "string"
+          },
+          {
+            "name": "limit",
+            "in": "query",
+            "description": "Parametr mechanizmu stronicowania określający ilość wyników na stronie.\nJest to dodatnia liczba całkowita podawana z kluczem parametru.\nDomyślna wartość → 100, Maksymalna wartość → 500.",
+            "required": false,
+            "type": "string",
+            "default": "100"
+          },
+          {
+            "name": "page",
+            "in": "query",
+            "description": "Parametr mechanizmu stronicowania określający, którą stronę wyników chce pobrać użytkownik.\nJest to dodatnia liczba całkowita podawana z kluczem parametru. Domyślna wartość → 1.",
+            "required": false,
+            "type": "string",
+            "default": "1"
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "OK",
+            "schema": {
+              "$ref": "#/definitions/JsonApiForObjectStatisticsActivityHourly"
+            },
+            "headers": {
+              "X-Rate-Limit-Remaining": {
+                "schema": {
+                  "type": "integer"
+                },
+                "description": "Szacunkowy pozostały limit wywołań usługi dla adresu IP w jednostce czasu."
+              }
+            }
+          },
+          "404": {
+            "description": "Not Found"
+          }
+        },
+        "deprecated": false
+      }
+    },
+    "/statystyki/slowniki/{data-statystyki}": {
+      "get": {
+        "tags": [
+          "Statystyki"
+        ],
+        "summary": "",
+        "description": "Metoda udostępnia statystykę użycia metody /slowniki we wksazanym dniu.",
+        "operationId": "getListaStatystykWyszukanSlownikow",
+        "produces": [
+          "*/*"
+        ],
+        "parameters": [
+          {
+            "name": "data-statystyki",
+            "in": "path",
+            "description": "Wymagany parametr daty podawany w formacie YYYYMMDD.\nOkreśla dzień, za który mają zostać zwrócone statystyki użycia metody /slowniki.",
+            "required": true,
+            "type": "string"
+          },
+          {
+            "name": "limit",
+            "in": "query",
+            "description": "Parametr mechanizmu stronicowania określający ilość wyników na stronie.\nJest to dodatnia liczba całkowita podawana z kluczem parametru.\nDomyślna wartość → 100, Maksymalna wartość → 500.",
+            "required": false,
+            "type": "string",
+            "default": "100"
+          },
+          {
+            "name": "page",
+            "in": "query",
+            "description": "Parametr mechanizmu stronicowania określający, którą stronę wyników chce pobrać użytkownik.\nJest to dodatnia liczba całkowita podawana z kluczem parametru. Domyślna wartość → 1.",
+            "required": false,
+            "type": "string",
+            "default": "1"
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "OK",
+            "schema": {
+              "$ref": "#/definitions/JsonApiForObjectDictionary"
+            },
+            "headers": {
+              "X-Rate-Limit-Remaining": {
+                "schema": {
+                  "type": "integer"
+                },
+                "description": "Szacunkowy pozostały limit wywołań usługi dla adresu IP w jednostce czasu."
+              }
+            }
+          },
+          "404": {
+            "description": "Not Found"
+          }
+        },
+        "deprecated": false
+      }
+    },
+    "/v1/version": {
+      "get": {
+        "tags": [
+          "Wersje"
+        ],
+        "summary": "",
+        "description": "Metoda udostępnia infromację o najnowszej wersji API - V.1",
+        "operationId": "getWersjaV1",
+        "produces": [
+          "application/json"
+        ],
+        "responses": {
+          "200": {
+            "description": "OK",
+            "schema": {
+              "$ref": "#/definitions/VersionDto"
+            }
+          },
+          "400": {
+            "description": "Bad Request",
+            "schema": {
+              "$ref": "#/definitions/error"
+            }
+          }
+        },
+        "deprecated": false
+      }
+    },
+    "/version": {
+      "get": {
+        "tags": [
+          "Wersje"
+        ],
+        "summary": "",
+        "description": "Metoda udostępnia infromację o najnowszej wersji API - V.1",
+        "operationId": "getWersjaAktualna",
+        "produces": [
+          "application/json"
+        ],
+        "responses": {
+          "200": {
+            "description": "OK",
+            "schema": {
+              "$ref": "#/definitions/VersionDto"
+            }
+          },
+          "400": {
+            "description": "Bad Request",
+            "schema": {
+              "$ref": "#/definitions/error"
+            }
+          }
+        },
+        "deprecated": false
+      }
+    }
+  },
+  "definitions": {
+    "JsonApiForListVehicle": {
+      "title": "Komunikat JSON-API dla listy pojazdów",
+      "type": "object",
+      "description": "Model odpowiedzi API udostępniającej listę rekordów w standardzie JSON API.",
+      "properties": {
+        "data": {
+          "description": "Lista rekordów.",
+          "type": "array",
+          "items": {
+            "$ref": "#/definitions/ApiAttributesDtoVehicle"
+          }
+        },
+        "links": {
+          "$ref": "#/definitions/ApiLinksDto"
+        },
+        "meta": {
+          "$ref": "#/definitions/ApiMetaDto"
+        }
+      }
+    },
+    "JsonApiForObjectVehicle": {
+      "title": "Komunikat JSON-API dla pojedynczego pojazdu",
+      "type": "object",
+      "description": "Model odpowiedzi API udostępniającej pojedyńczy rekord w standardzie JSON API.",
+      "properties": {
+        "data": {
+          "$ref": "#/definitions/ApiAttributesDtoVehicle"
+        },
+        "links": {
+          "$ref": "#/definitions/ApiLinksDto"
+        },
+        "meta": {
+          "$ref": "#/definitions/ApiMetaDto"
+        }
+      }
+    },
+    "ApiAttributesDtoVehicle": {
+      "title": "Zasób - dane techniczne pojazdu",
+      "description": "Model sekcji atrybutów odpowiedzi API zgodnej ze standardem JSON API.",
+      "type": "object",
+      "properties": {
+        "attributes": {
+          "description": "Dane udostępnionego zasobu.",
+          "$ref": "#/definitions/VehicleDto"
+        },
+        "id": {
+          "description": "Unikalny identyfikator zasobu.",
+          "type": "string"
+        },
+        "links": {
+          "description": "Linki nawigujące HATEOS.",
+          "$ref": "#/definitions/ApiLinksOneDto"
+        },
+        "type": {
+          "description": "Typ zasobu.",
+          "type": "string"
+        }
+      }
+    },
+    "VehicleDto": {
+      "title": "Dane techniczne pojazdu",
+      "description": "Dane techniczne pojazdu przechowywane w CEPiK.",
+      "type": "object",
+      "properties": {
+        "rejestracja-gmina": {
+          "description": "Aktualne miejsce rejestracji - gmina.",
+          "type": "string"
+        },
+        "rejestracja-powiat": {
+          "description": "Aktualne miejsce rejestracji - powiat.",
+          "type": "string"
+        },
+        "rejestracja-wojewodztwo": {
+          "description": "Aktualne miejsce rejestracji - województwo.",
+          "type": "string"
+        },
+        "data-ostatniej-rejestracji-w-kraju": {
+          "description": "Data każdej kolejnej rejestracji w kraju.",
+          "type": "string"
+        },
+        "data-pierwszej-rejestracji": {
+          "description": "Data pierwszej rejestracji.",
+          "type": "string"
+        },
+        "data-pierwszej-rejestracjiwkraju": {
+          "description": "Data pierwszej rejestracji w kraju.",
+          "type": "string"
+        },
+        "data-pierwszej-rejestracji-za-granica": {
+          "description": "Data rejestracji za granicą.",
+          "type": "string"
+        },
+        "data-wprowadzenia-danych": {
+          "description": "Data wprowadzenia danych.",
+          "type": "string"
+        },
+        "data-wyrejestrowania-pojazdu": {
+          "description": "Data wyrejestrowania pojazdu.",
+          "type": "string"
+        },
+        "dopuszczalna-ladownosc": {
+          "description": "Dopuszczalna ladownosc.",
+          "type": "integer"
+        },
+        "dopuszczalna-masa-calkowita": {
+          "description": "Dopuszczalna masa calkowita.",
+          "type": "integer"
+        },
+        "dopuszczalna-masa-calkowita-zespolu-pojazdow": {
+          "description": "Dopuszczalna masa całkowita zespołu pojazdów.",
+          "type": "integer"
+        },
+        "poziom-emisji-co2": {
+          "description": "Poziom emisji co2.",
+          "type": "number"
+        },
+        "poziom-emisji-co2-pierwsze-paliwo-alternatwne": {
+          "description": "Poziom emisji co2 pierwszego paliwa alternatywnego.",
+          "type": "number"
+        },
+        "poziom-emisji-co2-drugie-paliwo-alternatwne": {
+          "description": "Poziom emisji co2 drugiego paliwa alternatywnego.",
+          "type": "number"
+        },
+        "kategoria-pojazdu": {
+          "description": "Kategoria pojazdu.",
+          "type": "string"
+        },
+        "kod-instytutu-transportu-samochodowego": {
+          "description": "Kod instytutu transportu samochodowego.",
+          "type": "string"
+        },
+        "kod-rodzaj-podrodzaj-przeznaczenie": {
+          "description": "Kod rodzaj-podrodzaj-przeznaczenie.",
+          "type": "string"
+        },
+        "liczba-miejsc-ogolem": {
+          "description": "Liczba miejsc ogółem.",
+          "type": "integer"
+        },
+        "liczba-miejsc-siedzacych": {
+          "description": "Liczba miejsc siedzących.",
+          "type": "integer"
+        },
+        "liczba-miejsc-stojacych": {
+          "description": "Liczba miejsc stojących.",
+          "type": "integer"
+        },
+        "liczba-osi": {
+          "description": "Liczba osi.",
+          "type": "integer"
+        },
+        "maksymalna-ladownosc": {
+          "description": "Maksymalna ładowność.",
+          "type": "integer"
+        },
+        "maksymalna-masa-calkowita": {
+          "description": "Maksymalna masa calkowita.",
+          "type": "integer"
+        },
+        "max-masa-calkowita-ciagnietej-przyczepy-bez-hamulca": {
+          "description": "Maksymalna masa całkowita ciągniętej przyczepy bez hamulca.",
+          "type": "integer"
+        },
+        "max-masa-calkowita-przyczepy-bez-hamulca": {
+          "description": "Maksymalna masa całkowita ciągniętej przyczepy z hamulcem.",
+          "type": "integer"
+        },
+        "max-moc-netto-silnikow-pojazdu-hybrydowego": {
+          "description": "Maksymalna moc netto silnika (silników) pojazdu hybrydowego, jeżeli dotyczy.",
+          "type": "number"
+        },
+        "max-rozstaw-kol": {
+          "description": "Maksymalny rozstaw kół.",
+          "type": "integer"
+        },
+        "moc-netto-silnika": {
+          "description": "Moc netto silnika.",
+          "type": "number"
+        },
+        "marka": {
+          "description": "Marka.",
+          "type": "string"
+        },
+        "masa-pojazdu-gotowego-do-jazdy": {
+          "description": "Masa pojazdu gotowego do jazdy.",
+          "type": "integer"
+        },
+        "masa-wlasna": {
+          "description": "Masa wlasna.",
+          "type": "integer"
+        },
+        "min-rozstaw-kol": {
+          "description": "Minimalny rozstaw kół.",
+          "type": "integer"
+        },
+        "model": {
+          "description": "Model pojazdu.",
+          "type": "string"
+        },
+        "dopuszczalny-nacisk-osi": {
+          "description": "Największy dopuszczalny nacisk osi.",
+          "type": "number"
+        },
+        "maksymalny-nacisk-osi": {
+          "description": "Największy maksymalny nacisk osi.",
+          "type": "number"
+        },
+        "nazwa-producenta": {
+          "description": "Nazwa producenta pojazdu.",
+          "type": "string"
+        },
+        "pochodzenie-pojazdu": {
+          "description": "Pochodzenie pojazdu.",
+          "type": "string"
+        },
+        "podrodzaj-pojazdu": {
+          "description": "Podrodzaj pojazdu.",
+          "type": "string"
+        },
+        "pojemnosc-skokowa-silnika": {
+          "description": "Pojemność skokowa silnika.",
+          "type": "number"
+        },
+        "przeznaczenie-pojazdu": {
+          "description": "Przeznaczenie pojazdu.",
+          "type": "string"
+        },
+        "przyczyna-wyrejestrowania-pojazdu": {
+          "description": "Przyczyna wyrejestrowania pojazdu.",
+          "type": "string"
+        },
+        "redukcja-emisji-spalin": {
+          "description": "Redukcja emisji spalin w wyniku zastosowania technologii innowacyjnej lub grupy technologii innowacyjnych.",
+          "type": "number"
+        },
+        "rodzaj-drugiego-paliwa-alternatywnego": {
+          "description": "Rodzaj drugiego paliwa alternatywnego.",
+          "type": "string"
+        },
+        "rodzaj-kodowania-rodzaj-podrodzaj-przeznaczenie": {
+          "description": "Rodzaj kodowania rodzaj podrodzaj przeznaczenie.",
+          "type": "string"
+        },
+        "rodzaj-paliwa": {
+          "description": "Rodzaj paliwa.",
+          "type": "string"
+        },
+        "rodzaj-pierwszego-paliwa-alternatywnego": {
+          "description": "Rodzaj pierwszego paliwa alternatywnego.",
+          "type": "string"
+        },
+        "rodzaj-pojazdu": {
+          "description": "Rodzaj pojazdu.",
+          "type": "string"
+        },
+        "rodzaj-tabliczki-znamionowej": {
+          "description": "Rodzaj tabliczki znamionowej.",
+          "type": "string"
+        },
+        "rodzaj-zwieszenia": {
+          "description": "Rodzaj zawieszenia.",
+          "type": "string"
+        },
+        "rok-produkcji": {
+          "description": "Rok produkcji.",
+          "type": "string"
+        },
+        "rozstaw-kol-osi-kierowanej-pozostalych-osi": {
+          "description": "Rozstaw kół osi kierowanej i rozstaw kół pozostałych osi.",
+          "type": "string"
+        },
+        "wlasciciel-gmina": {
+          "description": "Siedziba lub miejsce zamieszkania właściciela (pierwszego jeżeli jest współwłasność) pojazdu (gmina).",
+          "type": "string"
+        },
+        "wlasciciel-powiat": {
+          "description": "Siedziba lub miejsce zamieszkania właściciela (pierwszego jeżeli jest współwłasność) pojazdu (powiat).",
+          "type": "string"
+        },
+        "wlasciciel-wojewodztwo": {
+          "description": "Siedziba lub miejsce zamieszkania właściciela (pierwszego jeżeli jest współwłasność) pojazdu (województwo).",
+          "type": "string"
+        },
+        "sposob-produkcji": {
+          "description": "Sposób produkcji.",
+          "type": "string"
+        },
+        "avg-rozstaw-kol": {
+          "description": "Średni rozstaw kół.",
+          "type": "integer"
+        },
+        "avg-zuzycie-paliwa": {
+          "description": "Średnie zużycie paliwa.",
+          "type": "number"
+        },
+        "stosunek-mocy-silnika-do-masy-wlasnej-motocykle": {
+          "description": "Stosunek maksymalnej mocy netto silnika do masy własnej (dotyczy tylko motocykli).",
+          "type": "number"
+        },
+        "typ": {
+          "description": "Typ pojazdu.",
+          "type": "string"
+        },
+        "wariant": {
+          "description": "Wariant pojazdu.",
+          "type": "string"
+        },
+        "wersja": {
+          "description": "Wersja pojazdu.",
+          "type": "string"
+        },
+        "wyposazenie-i-rodzaj-urzadzenia-radarowego": {
+          "description": "Wyposażenie i rodzaj urządzenia radarowego.",
+          "type": "string"
+        },
+        "kierownica-po-prawej-stronie": {
+          "description": "Kierownica po prawej stronie.",
+          "type": "boolean"
+        },
+        "kierownica-po-prawej-stronie-pierwotnie": {
+          "description": "Kierownica po prawej stronie pierwotnie.",
+          "type": "boolean"
+        },
+        "hak": {
+          "description": "Zamontowany hak.",
+          "type": "boolean"
+        },
+        "katalizator-pochlaniacz": {
+          "description": "Zamontowany katalizator/pochłaniacz.",
+          "type": "boolean"
+        },
+        "wojewodztwo-kod": {
+          "description": "Kod teryt wojewodztwa.",
+          "type": "string"
+        },
+        "wlasciciel-wojewodztwo-kod": {
+          "description": "Kod teryt województwa zamiaszkania właściciela pojazdu.",
+          "type": "string"
+        }
+      }
+    },
+    "JsonApiForListFile": {
+      "title": "Komunikat JSON-API dla listy plików",
+      "type": "object",
+      "description": "Model odpowiedzi API udostępniającej listę rekordów w standardzie JSON API.",
+      "properties": {
+        "data": {
+          "description": "Lista rekordów.",
+          "type": "array",
+          "items": {
+            "$ref": "#/definitions/ApiAttributesDtoFile"
+          }
+        },
+        "links": {
+          "$ref": "#/definitions/ApiLinksDto"
+        },
+        "meta": {
+          "$ref": "#/definitions/ApiMetaDto"
+        }
+      }
+    },
+    "JsonApiForObjectFile": {
+      "title": "Komunikat JSON-API dla danych pliku",
+      "type": "object",
+      "description": "Model odpowiedzi API udostępniającej pojedyńczy rekord w standardzie JSON API.",
+      "properties": {
+        "data": {
+          "$ref": "#/definitions/ApiAttributesDtoFile"
+        },
+        "links": {
+          "$ref": "#/definitions/ApiLinksDto"
+        },
+        "meta": {
+          "$ref": "#/definitions/ApiMetaDto"
+        }
+      }
+    },
+    "ApiAttributesDtoFile": {
+      "title": "Zasób - dane pliku",
+      "description": "Model sekcji atrybutów odpowiedzi API zgodnej ze standardem JSON API.",
+      "type": "object",
+      "properties": {
+        "attributes": {
+          "description": "Dane udostępnionego zasobu.",
+          "$ref": "#/definitions/FileDto"
+        },
+        "id": {
+          "description": "Unikalny identyfikator pliku.",
+          "type": "string"
+        },
+        "links": {
+          "description": "Linki nawigujące HATEOS.",
+          "$ref": "#/definitions/ApiLinksOneDto"
+        },
+        "type": {
+          "description": "Typ zasobu.",
+          "type": "string"
+        }
+      }
+    },
+    "FileDto": {
+      "title": "Dane pliku",
+      "description": "Dane udostępnianego pliku.",
+      "type": "object",
+      "properties": {
+        "url-do-pliku": {
+          "description": "Link do pliku zawierającego określoną listę rekordów zasobów.",
+          "type": "string"
+        },
+        "url-do-metadanych-pliku": {
+          "description": "Link do metadanych opisujących wewnętrzną strukturę pliku.",
+          "type": "string"
+        },
+        "opis-zawartosci": {
+          "description": "Informacje o zawartości pliku.",
+          "type": "string"
+        },
+        "opis-formatu-pliku": {
+          "description": "Informacje o formacie pliku.",
+          "type": "string"
+        },
+        "typ-zasobu-bedacego-zawartoscia": {
+          "description": "Informacja jaki zasób zawiera plik, np. pojazdy.",
+          "type": "string"
+        },
+        "data-utworzenia-pliku": {
+          "description": "Data utworzenia pliku.",
+          "type": "string"
+        }
+      }
+    },
+    "JsonApiForListDrivingLicense": {
+      "title": "Komunikat JSON-API dla listy statystyk wydanych praw jazdy",
+      "type": "object",
+      "description": "Model odpowiedzi API udostępniającej listę rekordów w standardzie JSON API.",
+      "properties": {
+        "data": {
+          "description": "Lista rekordów.",
+          "type": "array",
+          "items": {
+            "$ref": "#/definitions/ApiAttributesDtoDrivingLicense"
+          }
+        },
+        "links": {
+          "$ref": "#/definitions/ApiLinksDto"
+        },
+        "meta": {
+          "$ref": "#/definitions/ApiMetaDto"
+        }
+      }
+    },
+    "JsonApiForObjectDrivingLicense": {
+      "title": "Komunikat JSON-API dla statystyki wydanych praw jazdy",
+      "type": "object",
+      "description": "Model odpowiedzi API udostępniającej pojedyńczy rekord w standardzie JSON API.",
+      "properties": {
+        "data": {
+          "$ref": "#/definitions/ApiAttributesDtoDrivingLicense"
+        },
+        "links": {
+          "$ref": "#/definitions/ApiLinksDto"
+        },
+        "meta": {
+          "$ref": "#/definitions/ApiMetaDto"
+        }
+      }
+    },
+    "ApiAttributesDtoDrivingLicense": {
+      "title": "Zasób - statystyka wydanych praw jazdy",
+      "description": "Model sekcji atrybutów odpowiedzi API zgodnej ze standardem JSON API.",
+      "type": "object",
+      "properties": {
+        "attributes": {
+          "description": "Dane udostępnionego zasobu.",
+          "$ref": "#/definitions/DrivingLicenseDto"
+        },
+        "id": {
+          "description": "Unikalny identyfikator statystyki.",
+          "type": "string"
+        },
+        "links": {
+          "description": "Linki nawigujące HATEOS.",
+          "$ref": "#/definitions/ApiLinksOneDto"
+        },
+        "type": {
+          "description": "Typ zasobu.",
+          "type": "string"
+        }
+      }
+    },
+    "DrivingLicenseDto": {
+      "title": "Wydane prawa jazdy",
+      "description": "Dane miesięcznej statystyki wydań praw jazdy.",
+      "type": "object",
+      "properties": {
+        "data-statystyki": {
+          "description": "Data statystyki w formacie YYYY-MM. Określenie miesiąca, ze który zebrano informacje o wydanych prawach jazdy.",
+          "type": "string"
+        },
+        "wojewodztwo-kod": {
+          "description": "Kod TERYT województwa, którego dane dotyczą.",
+          "type": "string"
+        },
+        "wojewodztwo-nazwa": {
+          "description": "Nazwa województwa, którego dane dotyczą.",
+          "type": "string"
+        },
+        "plec": {
+          "description": "Płeć kierowcy. K - kobieta, M - mężczyzna",
+          "type": "string"
+        },
+        "wiek": {
+          "description": "Wiek kierowcy wyrażony w latach",
+          "type": "integer"
+        },
+        "ilosc": {
+          "description": "Ilość wydanych praw jazdy",
+          "type": "integer"
+        }
+      }
+    },
+    "JsonApiForListDrivingPermission": {
+      "title": "Komunikat JSON-API dla listy statystyk nadanych uprawnień do kierowania pojazdami",
+      "type": "object",
+      "description": "Model odpowiedzi API udostępniającej listę rekordów w standardzie JSON API.",
+      "properties": {
+        "data": {
+          "description": "Lista rekordów.",
+          "type": "array",
+          "items": {
+            "$ref": "#/definitions/ApiAttributesDtoDrivingPermission"
+          }
+        },
+        "links": {
+          "$ref": "#/definitions/ApiLinksDto"
+        },
+        "meta": {
+          "$ref": "#/definitions/ApiMetaDto"
+        }
+      }
+    },
+    "JsonApiForObjectDrivingPermission": {
+      "title": "Komunikat JSON-API dla statystyki nadanych uprawnień do kierowania pojazdami",
+      "type": "object",
+      "description": "Model odpowiedzi API udostępniającej pojedyńczy rekord w standardzie JSON API.",
+      "properties": {
+        "data": {
+          "$ref": "#/definitions/ApiAttributesDtoDrivingPermission"
+        },
+        "links": {
+          "$ref": "#/definitions/ApiLinksDto"
+        },
+        "meta": {
+          "$ref": "#/definitions/ApiMetaDto"
+        }
+      }
+    },
+    "ApiAttributesDtoDrivingPermission": {
+      "title": "Zasób - statystyka nadanych uprawnień do kierowania pojazdami",
+      "description": "Model sekcji atrybutów odpowiedzi API zgodnej ze standardem JSON API.",
+      "type": "object",
+      "properties": {
+        "attributes": {
+          "description": "Dane udostępnionego zasobu.",
+          "$ref": "#/definitions/DrivingPermissionDto"
+        },
+        "id": {
+          "description": "Unikalny identyfikator statystyki.",
+          "type": "string"
+        },
+        "links": {
+          "description": "Linki nawigujące HATEOS.",
+          "$ref": "#/definitions/ApiLinksOneDto"
+        },
+        "type": {
+          "description": "Typ zasobu.",
+          "type": "string"
+        }
+      }
+    },
+    "DrivingPermissionDto": {
+      "title": "Nadane uprawnienia do kierowania pojazdami",
+      "description": "Dane miesięcznej statystyki nadania uprawnień do kierowania pojazdami.",
+      "type": "object",
+      "properties": {
+        "data-statystyki": {
+          "description": "Data statystyki w formacie YYYY-MM. Określenie miesiąca, ze który zebrano informacje o nadanych uprawnieniach.",
+          "type": "string"
+        },
+        "wojewodztwo-kod": {
+          "description": "Kod TERYT województwa, którego dane dotyczą.",
+          "type": "string"
+        },
+        "wojewodztwo-nazwa": {
+          "description": "Nazwa województwa, którego dane dotyczą.",
+          "type": "string"
+        },
+        "kod-uprawnienia": {
+          "description": "Kod kategorii uprawnienia do kierowania pojazdami.",
+          "type": "string"
+        },
+        "plec": {
+          "description": "Płeć kierowcy. K - kobieta, M - mężczyzna",
+          "type": "string"
+        },
+        "wiek": {
+          "description": "Wiek kierowcy wyrażony w latach",
+          "type": "integer"
+        },
+        "ilosc": {
+          "description": "Ilość wydanych praw jazdy",
+          "type": "integer"
+        }
+      }
+    },
+    "JsonApiForListDictionary": {
+      "title": "Komunikat JSON-API dla listy słowników",
+      "type": "object",
+      "description": "Model odpowiedzi API udostępniającej listę rekordów w standardzie JSON API.",
+      "properties": {
+        "data": {
+          "description": "Lista rekordów.",
+          "type": "array",
+          "items": {
+            "$ref": "#/definitions/ApiAttributesDtoForListDictionary"
+          }
+        },
+        "links": {
+          "$ref": "#/definitions/ApiLinksDto"
+        },
+        "meta": {
+          "$ref": "#/definitions/ApiMetaDto"
+        }
+      }
+    },
+    "ApiAttributesDtoForListDictionary": {
+      "title": "Zasób - słownik na liście słowników",
+      "description": "Model sekcji atrybutów odpowiedzi API zgodnej ze standardem JSON API.",
+      "type": "object",
+      "properties": {
+        "attributes": {
+          "description": "Dane udostępnionego zasobu.",
+          "$ref": "#/definitions/DictionaryOnListDto"
+        },
+        "id": {
+          "description": "Unikalny identyfikator.",
+          "type": "string"
+        },
+        "links": {
+          "description": "Linki nawigujące HATEOS.",
+          "$ref": "#/definitions/ApiLinksOneDto"
+        },
+        "type": {
+          "description": "Typ zasobu.",
+          "type": "string"
+        }
+      }
+    },
+    "DictionaryOnListDto": {
+      "title": "Dane słownika na liście",
+      "description": "Dane słowników.",
+      "type": "object",
+      "properties": {
+        "opis-slownika": {
+          "description": "Opis słownika i jego przeznaczenia",
+          "type": "string"
+        }
+      }
+    },
+    "JsonApiForObjectDictionary": {
+      "title": "Komunikat JSON-API dla słownika",
+      "type": "object",
+      "description": "Model odpowiedzi API udostępniającej pojedyńczy rekord w standardzie JSON API.",
+      "properties": {
+        "data": {
+          "$ref": "#/definitions/ApiAttributesDtoDictionary"
+        },
+        "links": {
+          "$ref": "#/definitions/ApiLinksDto"
+        },
+        "meta": {
+          "$ref": "#/definitions/ApiMetaDto"
+        }
+      }
+    },
+    "ApiAttributesDtoDictionary": {
+      "title": "Zasób - dane słownika",
+      "description": "Model sekcji atrybutów odpowiedzi API zgodnej ze standardem JSON API.",
+      "type": "object",
+      "properties": {
+        "attributes": {
+          "description": "Dane udostępnionego zasobu.",
+          "$ref": "#/definitions/DictionaryDto"
+        },
+        "id": {
+          "description": "Unikalny identyfikator.",
+          "type": "string"
+        },
+        "links": {
+          "description": "Linki nawigujące HATEOS.",
+          "$ref": "#/definitions/ApiLinksOneDto"
+        },
+        "type": {
+          "description": "Typ zasobu.",
+          "type": "string"
+        }
+      }
+    },
+    "DictionaryDto": {
+      "title": "Dane słownika",
+      "description": "Dane słowników.",
+      "type": "object",
+      "properties": {
+        "dostepne-rekordy-slownika": {
+          "description": "Zawartość słownika.",
+          "type": "array",
+          "items": {
+            "$ref": "#/definitions/DictionaryDtoElement"
+          }
+        },
+        "ilosc-rekordow-slownika": {
+          "description": "Ilość wszystkich wartości słownika",
+          "type": "number"
+        }
+      }
+    },
+    "DictionaryDtoElement": {
+      "title": "Pozycja w słowniku",
+      "description": "Zawartość słownika.",
+      "type": "object",
+      "properties": {
+        "klucz-slownika": {
+          "description": "Właściwy klucz słownika służący do przeszukiwania zasobów API.",
+          "type": "string"
+        },
+        "wartosc-slownika": {
+          "description": "Opis klucza słownika.",
+          "type": "string"
+        },
+        "liczba-wystapien": {
+          "description": "Ilość rekordów występujących w całym zbiorze API dla danego klucza.",
+          "type": "string"
+        },
+        "slownik-powiazany": {
+          "description": "Link do słownika zagnieżdzonego.",
+          "type": "string"
+        }
+      }
+    },
+    "StatisticsDto": {
+      "description": "Metoda udostępnia listę dostępnych statystyk danego zasobu",
+      "type": "object",
+      "properties": {
+        "data": {
+          "description": "Data statystyki.",
+          "type": "string"
+        },
+        "nazwa": {
+          "description": "Nazwa zasobu, którego dotyczą statystyki",
+          "type": "string"
+        },
+        "liczba-odslon": {
+          "description": "Liczba wszystkich wywołań zasobu",
+          "type": "string"
+        },
+        "liczba-wizyt": {
+          "description": "Liczba unikalnych wywołań zasobu",
+          "type": "string"
+        }
+      },
+      "title": "statistics-attributes"
+    },
+    "JsonApiForListStatistics": {
+      "type": "object",
+      "description": "Model odpowiedzi API udostępniającej listę rekordów w standardzie JSON API.",
+      "properties": {
+        "data": {
+          "description": "Lista rekordów.",
+          "type": "array",
+          "items": {
+            "$ref": "#/definitions/ApiAttributesDtoStatistics"
+          }
+        },
+        "links": {
+          "$ref": "#/definitions/ApiLinksDto"
+        },
+        "meta": {
+          "$ref": "#/definitions/ApiMetaDto"
+        }
+      },
+      "title": "json-api-list-statistics"
+    },
+    "JsonApiForObjectStatistics": {
+      "type": "object",
+      "description": "Model odpowiedzi API udostępniającej pojedyńczy rekord w standardzie JSON API.",
+      "properties": {
+        "data": {
+          "$ref": "#/definitions/ApiAttributesDtoStatistics"
+        },
+        "links": {
+          "$ref": "#/definitions/ApiLinksDto"
+        },
+        "meta": {
+          "$ref": "#/definitions/ApiMetaDto"
+        }
+      },
+      "title": "json-api-object-statistics"
+    },
+    "ApiAttributesDtoStatistics": {
+      "description": "Model sekcji atrybutów odpowiedzi API zgodnej ze standardem JSON API.",
+      "type": "object",
+      "properties": {
+        "attributes": {
+          "description": "Dane udostępnionego zasobu.",
+          "$ref": "#/definitions/StatisticsDto"
+        },
+        "id": {
+          "description": "Unikalny identyfikator.",
+          "type": "string"
+        },
+        "links": {
+          "description": "Linki nawigujące HATEOS.",
+          "$ref": "#/definitions/ApiLinksOneDto"
+        },
+        "type": {
+          "description": "Typ zasobu.",
+          "type": "string"
+        }
+      },
+      "title": "api-attributes-dto-statistics"
+    },
+    "StatisticsVehicleDto": {
+      "description": "Statystyki wywołań metody /pojazdy",
+      "type": "object",
+      "properties": {
+        "data-statystyki": {
+          "description": "Data statystyki.",
+          "type": "string"
+        },
+        "nazwa-wojewodztwa": {
+          "description": "Nazwa województwa będącego województwem rejestracji pojazdu.",
+          "type": "string"
+        },
+        "ilosc-wyszukan": {
+          "description": "Liczba wszystkich wywołań metody /pojazdy.",
+          "type": "string"
+        }
+      },
+      "title": "statistics-vehicles-attributes"
+    },
+    "JsonApiForListStatisticsVehicle": {
+      "type": "object",
+      "description": "Model odpowiedzi API udostępniającej listę rekordów w standardzie JSON API.",
+      "properties": {
+        "data": {
+          "description": "Lista rekordów.",
+          "type": "array",
+          "items": {
+            "$ref": "#/definitions/ApiAttributesDtoStatisticsVehicle"
+          }
+        },
+        "links": {
+          "$ref": "#/definitions/ApiLinksDto"
+        },
+        "meta": {
+          "$ref": "#/definitions/ApiMetaDto"
+        }
+      },
+      "title": "json-api-list-statistics-vehicle"
+    },
+    "JsonApiForObjectStatisticsVehicle": {
+      "type": "object",
+      "description": "Model odpowiedzi API udostępniającej pojedyńczy rekord w standardzie JSON API.",
+      "properties": {
+        "data": {
+          "$ref": "#/definitions/ApiAttributesDtoStatisticsVehicle"
+        },
+        "links": {
+          "$ref": "#/definitions/ApiLinksDto"
+        },
+        "meta": {
+          "$ref": "#/definitions/ApiMetaDto"
+        }
+      },
+      "title": "json-api-object-statistics-vehicle"
+    },
+    "ApiAttributesDtoStatisticsVehicle": {
+      "description": "Model sekcji atrybutów odpowiedzi API zgodnej ze standardem JSON API.",
+      "type": "object",
+      "properties": {
+        "attributes": {
+          "description": "Dane udostępnionego zasobu.",
+          "$ref": "#/definitions/StatisticsVehicleDto"
+        },
+        "id": {
+          "description": "Unikalny identyfikator.",
+          "type": "string"
+        },
+        "links": {
+          "description": "Linki nawigujące HATEOS.",
+          "$ref": "#/definitions/ApiLinksOneDto"
+        },
+        "type": {
+          "description": "Typ zasobu.",
+          "type": "string"
+        }
+      },
+      "title": "api-attributes-dto-statistics-vehicle"
+    },
+    "StatisticsServerWwwDto": {
+      "description": "Statystyki pobrań plików zawierających dane pojazdów",
+      "type": "object",
+      "properties": {
+        "data-statystyki": {
+          "description": "Data statystyki.",
+          "type": "string"
+        },
+        "nazwa-pliku": {
+          "description": "Nazwa pliku zawierającego dane pojazdów.",
+          "type": "string"
+        },
+        "opis-pliku": {
+          "description": "Informacje o zawartości pliku.",
+          "type": "string"
+        },
+        "liczba-pobran": {
+          "description": "Liczba wszystkich pobrań pliku.",
+          "type": "integer"
+        }
+      },
+      "title": "statistics-files-attributes"
+    },
+    "JsonApiForListStatisticsServerWww": {
+      "type": "object",
+      "description": "Model odpowiedzi API udostępniającej listę rekordów w standardzie JSON API.",
+      "properties": {
+        "data": {
+          "description": "Lista rekordów.",
+          "type": "array",
+          "items": {
+            "$ref": "#/definitions/ApiAttributesDtoStatisticsServerWww"
+          }
+        },
+        "links": {
+          "$ref": "#/definitions/ApiLinksDto"
+        },
+        "meta": {
+          "$ref": "#/definitions/ApiMetaDto"
+        }
+      },
+      "title": "json-api-list-statistics-server-www"
+    },
+    "JsonApiForObjectStatisticsServerWww": {
+      "type": "object",
+      "description": "Model odpowiedzi API udostępniającej pojedyńczy rekord w standardzie JSON API.",
+      "properties": {
+        "data": {
+          "$ref": "#/definitions/ApiAttributesDtoStatisticsServerWww"
+        },
+        "links": {
+          "$ref": "#/definitions/ApiLinksDto"
+        },
+        "meta": {
+          "$ref": "#/definitions/ApiMetaDto"
+        }
+      },
+      "title": "json-api-object-statistics-server-www"
+    },
+    "ApiAttributesDtoStatisticsServerWww": {
+      "description": "Model sekcji atrybutów odpowiedzi API zgodnej ze standardem JSON API.",
+      "type": "object",
+      "properties": {
+        "attributes": {
+          "description": "Dane udostępnionego zasobu.",
+          "$ref": "#/definitions/StatisticsServerWwwDto"
+        },
+        "id": {
+          "description": "Unikalny identyfikator.",
+          "type": "string"
+        },
+        "links": {
+          "description": "Linki nawigujące HATEOS.",
+          "$ref": "#/definitions/ApiLinksOneDto"
+        },
+        "type": {
+          "description": "Typ zasobu.",
+          "type": "string"
+        }
+      },
+      "title": "api-attributes-dto-statistics-server-www"
+    },
+    "StatisticsActivityDailyDto": {
+      "description": "Metoda udostępnia dzienną statystykę wywołań wszystkich metod API",
+      "type": "object",
+      "properties": {
+        "dzien-tygodnia": {
+          "description": "Nazwa dnia tygodnia.",
+          "type": "string"
+        },
+        "data-statystyki": {
+          "description": "Data statystyki.",
+          "type": "string"
+        },
+        "laczna-ilosc-wyswietlen": {
+          "description": "Liczba wszystkich wywołań metod API we wskazanym dniu.",
+          "type": "string"
+        }
+      },
+      "title": "statistics-activity-daily-attributes"
+    },
+    "JsonApiForListStatisticsActivityDaily": {
+      "type": "object",
+      "description": "Model odpowiedzi API udostępniającej listę rekordów w standardzie JSON API.",
+      "properties": {
+        "data": {
+          "description": "Lista rekordów.",
+          "type": "array",
+          "items": {
+            "$ref": "#/definitions/ApiAttributesDtoStatisticsActivityDaily"
+          }
+        },
+        "links": {
+          "$ref": "#/definitions/ApiLinksDto"
+        },
+        "meta": {
+          "$ref": "#/definitions/ApiMetaDto"
+        }
+      },
+      "title": "json-api-list-statistics-activity-daily"
+    },
+    "JsonApiForObjectStatisticsActivityDaily": {
+      "type": "object",
+      "description": "Model odpowiedzi API udostępniającej pojedyńczy rekord w standardzie JSON API.",
+      "properties": {
+        "data": {
+          "$ref": "#/definitions/ApiAttributesDtoStatisticsActivityDaily"
+        },
+        "links": {
+          "$ref": "#/definitions/ApiLinksDto"
+        },
+        "meta": {
+          "$ref": "#/definitions/ApiMetaDto"
+        }
+      },
+      "title": "json-api-object-statistics-activity-daily"
+    },
+    "ApiAttributesDtoStatisticsActivityDaily": {
+      "description": "Model sekcji atrybutów odpowiedzi API zgodnej ze standardem JSON API.",
+      "type": "object",
+      "properties": {
+        "attributes": {
+          "description": "Dane udostępnionego zasobu.",
+          "$ref": "#/definitions/StatisticsActivityDailyDto"
+        },
+        "id": {
+          "description": "Unikalny identyfikator.",
+          "type": "string"
+        },
+        "links": {
+          "description": "Linki nawigujące HATEOS.",
+          "$ref": "#/definitions/ApiLinksOneDto"
+        },
+        "type": {
+          "description": "Typ zasobu.",
+          "type": "string"
+        }
+      },
+      "title": "api-attributes-dto-statistics-activity-daily"
+    },
+    "StatisticsActivityHourlyDto": {
+      "description": "Metoda udostępnia statystykę wywołań wszystkich metod API w przedziałach godzinowych",
+      "type": "object",
+      "properties": {
+        "data-statystyki": {
+          "description": "Data statystyki.",
+          "type": "string"
+        },
+        "godzina-od": {
+          "description": "Godzina rozpoczęcia przedziału czasowego.",
+          "type": "string"
+        },
+        "godzina-do": {
+          "description": "Godzina zakończenia przedziału czasowego (wykluczona z bieżącego przedziału).",
+          "type": "string"
+        },
+        "laczna-ilosc-wyswietlen": {
+          "description": "Liczba wszystkich wywołań metod API w wybranym przedziale godzinowym",
+          "type": "string"
+        }
+      },
+      "title": "statistics-activity-hourly-attributes"
+    },
+    "JsonApiForListStatisticsActivityHourly": {
+      "type": "object",
+      "description": "Model odpowiedzi API udostępniającej listę rekordów w standardzie JSON API.",
+      "properties": {
+        "data": {
+          "description": "Lista rekordów.",
+          "type": "array",
+          "items": {
+            "$ref": "#/definitions/ApiAttributesDtoStatisticsActivityHourly"
+          }
+        },
+        "links": {
+          "$ref": "#/definitions/ApiLinksDto"
+        },
+        "meta": {
+          "$ref": "#/definitions/ApiMetaDto"
+        }
+      },
+      "title": "json-api-list-statistics-activity-hourly"
+    },
+    "JsonApiForObjectStatisticsActivityHourly": {
+      "type": "object",
+      "description": "Model odpowiedzi API udostępniającej pojedyńczy rekord w standardzie JSON API.",
+      "properties": {
+        "data": {
+          "$ref": "#/definitions/ApiAttributesDtoStatisticsActivityHourly"
+        },
+        "links": {
+          "$ref": "#/definitions/ApiLinksDto"
+        },
+        "meta": {
+          "$ref": "#/definitions/ApiMetaDto"
+        }
+      },
+      "title": "json-api-object-statistics-activity-hourly"
+    },
+    "ApiAttributesDtoStatisticsActivityHourly": {
+      "description": "Model sekcji atrybutów odpowiedzi API zgodnej ze standardem JSON API.",
+      "type": "object",
+      "properties": {
+        "attributes": {
+          "description": "Dane udostępnionego zasobu.",
+          "$ref": "#/definitions/StatisticsActivityHourlyDto"
+        },
+        "id": {
+          "description": "Unikalny identyfikator.",
+          "type": "string"
+        },
+        "links": {
+          "description": "Linki nawigujące HATEOS.",
+          "$ref": "#/definitions/ApiLinksOneDto"
+        },
+        "type": {
+          "description": "Typ zasobu.",
+          "type": "string"
+        }
+      },
+      "title": "api-attributes-dto-statistics-activity-hourly"
+    },
+    "VersionDto": {
+      "description": "Szczegóły dotyczące wersji API.",
+      "type": "object",
+      "properties": {
+        "dateMod": {
+          "description": "Data ostatniej modyfikacji wersji.",
+          "type": "string"
+        },
+        "deprecated": {
+          "description": "Data zakończenia wsparcia wersji.",
+          "type": "string"
+        },
+        "major": {
+          "description": "Numer wersji Major.",
+          "type": "string"
+        },
+        "minor": {
+          "description": "Numer wersji Minor.",
+          "type": "string"
+        },
+        "patch": {
+          "description": "Numer wersji Patch.",
+          "type": "string"
+        }
+      },
+      "title": "version"
+    },
+    "ApiMetaDto": {
+      "title": "Sekcja \"meta\".",
+      "description": "Metadane.",
+      "type": "object",
+      "properties": {
+        "contentType": {
+          "schema:description": "Określa informację o rodzaju zasobu i jego kodowaniu.",
+          "type": "string"
+        },
+        "count": {
+          "description": "Liczba zasobów spełniających kryteria wyszukiwania.",
+          "type": "integer",
+          "format": "int64"
+        },
+        "schema:dateModified": {
+          "description": "Data ostatniej modyfikacji zasobu z dokładnością do jednej sekundy.\nData i czas zgodnie ze standardem ISO-8601.",
+          "type": "string"
+        },
+        "schema:datePublished": {
+          "description": "Data i czas publikacji zasobu z dokładnością do jednej sekundy.\nData i czas zgodnie ze standardem ISO-8601.",
+          "type": "string"
+        },
+        "dc:description": {
+          "description": "Opis zasobu informacyjnego.",
+          "type": "string"
+        },
+        "schema:isPartOf": {
+          "description": "Określenie przynależności do grupy np. zasobów.",
+          "type": "string"
+        },
+        "dc:language": {
+          "description": "Określa język zasobu.",
+          "type": "string"
+        },
+        "limit": {
+          "description": "Przyjęty limit maksymalnej liczby elementów na stronie. Metadana związana z mechanizmem stronicowania.",
+          "type": "integer",
+          "format": "int32"
+        },
+        "page": {
+          "description": "Numer strony, dla której zwrócono dane. Metadana związana z mechanizmem stronicowania.",
+          "type": "integer",
+          "format": "int32"
+        },
+        "schema:provider": {
+          "description": "Opis dostawcy zasobu informacyjnego.",
+          "type": "string"
+        },
+        "dc:title": {
+          "description": "Nazwa zasobu informacyjnego, która umożliwia jego identyfikację.",
+          "type": "string"
+        },
+        "sY:updateBase": {
+          "description": "Informuje o tym, jaki jest interwał aktualizacji zasobu, np.: co miesiąc, co rok, co godzinę, co 10 sekund.",
+          "type": "string"
+        },
+        "sy:updateFrequency": {
+          "description": "Informuje o tym, jaki jest interwał aktualizacji zasobu, np.: co miesiąc, co rok, co godzinę, co 10 sekund.",
+          "type": "string"
+        },
+        "sy:updatePeriod": {
+          "description": "Informuje o tym, jaki jest interwał aktualizacji zasobu, np.: co miesiąc, co rok, co godzinę, co 10 sekund.",
+          "type": "string"
+        }
+      }
+    },
+    "ApiLinksDto": {
+      "title": "Sekcja \"links\" komunikatu.",
+      "description": "Linki nawigujące HATEOS.",
+      "type": "object",
+      "properties": {
+        "first": {
+          "description": "Link do pierwszej strony ze znalezionymi pozycjami.",
+          "type": "string"
+        },
+        "last": {
+          "description": "Link do ostatniej strony ze znalezionymi pozycjami.",
+          "type": "string"
+        },
+        "next": {
+          "description": "Link do następnej strony ze znalezionymi pozycjami.",
+          "type": "string"
+        },
+        "prev": {
+          "description": "Link do poprzedniej strony ze znalezionymi pozycjami.",
+          "type": "string"
+        },
+        "self": {
+          "description": "Link aktualnej strony ze znalezionymi pozycjami.",
+          "type": "string"
+        }
+      }
+    },
+    "ApiLinksOneDto": {
+      "title": "Sekcja \"links\" zasobu.",
+      "description": "Linki nawigujące HATEOS.",
+      "type": "object",
+      "properties": {
+        "self": {
+          "description": "Link prowadzący do danych zasobu.",
+          "type": "string"
+        }
+      }
+    },
+    "error": {
+      "title": "Sekcja \"error\" występująca w komunikatach błędu.",
+      "description": "Szczegóły błędu prezentowane w przypadku nieprawidłowego wykonania operacji.",
+      "type": "object",
+      "properties": {
+        "id": {
+          "format": "uuid",
+          "description": "Unikalny identyfikator zdarzenia.",
+          "type": "string"
+        },
+        "errorr-result": {
+          "description": "Rezultat błędu.",
+          "type": "string"
+        },
+        "errorr-reason": {
+          "description": "Powód błędu.",
+          "type": "string"
+        },
+        "errorr-solution": {
+          "description": "Rozwiązanie błędu.",
+          "type": "string"
+        },
+        "error-help": {
+          "description": "Link do pomocy i szczegółów.",
+          "type": "string"
+        },
+        "error-code": {
+          "description": "Kod błędu.",
+          "type": "string"
+        }
+      }
+    }
+  }
+}

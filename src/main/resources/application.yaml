@@ -3,6 +3,10 @@ server:
   servlet:
     context-path: /car-dealership-mvc
 
+api:
+  cepik:
+    url: https://api.cepik.gov.pl/
+
 spring:
   datasource:
     type: com.zaxxer.hikari.HikariDataSource
