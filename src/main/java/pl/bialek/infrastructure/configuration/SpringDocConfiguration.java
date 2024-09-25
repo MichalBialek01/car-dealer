@@ -26,7 +26,7 @@ public class SpringDocConfiguration {
         return new OpenAPI()
                 .components(new Components())
                 .info(new Info()
-                        .title("API fetch application")
+                        .title("Dealership application API")
                         .contact(contact())
                         .version("1.0")
                 );

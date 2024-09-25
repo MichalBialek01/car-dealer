@@ -1,7 +1,7 @@
 {
   "openapi": "3.0.1",
   "info": {
-    "title": "API fetch application",
+    "title": "Dealership application API",
     "contact": {
       "name": "Michal Bialek",
       "url": "none",
@@ -243,10 +243,10 @@
           "error": {
             "type": "boolean"
           },
-          "is5xxServerError": {
+          "is4xxClientError": {
             "type": "boolean"
           },
-          "is4xxClientError": {
+          "is5xxServerError": {
             "type": "boolean"
           },
           "is2xxSuccessful": {
