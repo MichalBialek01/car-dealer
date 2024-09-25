@@ -1,0 +1,585 @@
+{
+  "openapi": "3.0.1",
+  "info": {
+    "title": "API fetch application",
+    "contact": {
+      "name": "Michal Bialek",
+      "url": "none",
+      "email": "kontakt.michalbialek@gmail.com"
+    },
+    "version": "1.0"
+  },
+  "servers": [
+    {
+      "url": "http://localhost:8190/car-dealership-mvc",
+      "description": "Generated server url"
+    }
+  ],
+  "paths": {
+    "/api/service/request": {
+      "post": {
+        "tags": [
+          "service-rest-controller"
+        ],
+        "operationId": "processServiceRequest",
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/CarServiceCustomerRequestDTO"
+              }
+            }
+          },
+          "required": true
+        },
+        "responses": {
+          "500": {
+            "description": "Internal Server Error",
+            "content": {
+              "*/*": {
+                "schema": {
+                  "$ref": "#/components/schemas/ModelAndView"
+                }
+              }
+            }
+          },
+          "200": {
+            "description": "OK",
+            "content": {
+              "*/*": {
+                "schema": {
+                  "$ref": "#/components/schemas/CarServiceRequestsDTO"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/api/purchase": {
+      "get": {
+        "tags": [
+          "purchase-rest-controller"
+        ],
+        "operationId": "carsPurchaseData",
+        "responses": {
+          "500": {
+            "description": "Internal Server Error",
+            "content": {
+              "*/*": {
+                "schema": {
+                  "$ref": "#/components/schemas/ModelAndView"
+                }
+              }
+            }
+          },
+          "200": {
+            "description": "OK",
+            "content": {
+              "*/*": {
+                "schema": {
+                  "$ref": "#/components/schemas/CarsToBuyDTO"
+                }
+              }
+            }
+          }
+        }
+      },
+      "post": {
+        "tags": [
+          "purchase-rest-controller"
+        ],
+        "operationId": "makePurchase",
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/CarPurchaseRequestDTO"
+              }
+            }
+          },
+          "required": true
+        },
+        "responses": {
+          "500": {
+            "description": "Internal Server Error",
+            "content": {
+              "*/*": {
+                "schema": {
+                  "$ref": "#/components/schemas/ModelAndView"
+                }
+              }
+            }
+          },
+          "200": {
+            "description": "OK",
+            "content": {
+              "*/*": {
+                "schema": {
+                  "$ref": "#/components/schemas/InvoiceDTO"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/api/mechanic/workUnit": {
+      "post": {
+        "tags": [
+          "mechanic-rest-controller"
+        ],
+        "operationId": "mechanicPerformWorkUnit",
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/CarServiceMechanicProcessingUnitDTO"
+              }
+            }
+          },
+          "required": true
+        },
+        "responses": {
+          "500": {
+            "description": "Internal Server Error",
+            "content": {
+              "*/*": {
+                "schema": {
+                  "$ref": "#/components/schemas/ModelAndView"
+                }
+              }
+            }
+          },
+          "200": {
+            "description": "OK",
+            "content": {
+              "*/*": {
+                "schema": {
+                  "$ref": "#/components/schemas/CarServiceRequestsDTO"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/api/mechanic/availableServiceRequests": {
+      "get": {
+        "tags": [
+          "mechanic-rest-controller"
+        ],
+        "operationId": "getAvailableServiceRequests",
+        "responses": {
+          "500": {
+            "description": "Internal Server Error",
+            "content": {
+              "*/*": {
+                "schema": {
+                  "$ref": "#/components/schemas/ModelAndView"
+                }
+              }
+            }
+          },
+          "200": {
+            "description": "OK",
+            "content": {
+              "*/*": {
+                "schema": {
+                  "$ref": "#/components/schemas/CarServiceRequestsDTO"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/api/car/{carVin}/history": {
+      "get": {
+        "tags": [
+          "car-history-rest-controller"
+        ],
+        "operationId": "carHistory",
+        "parameters": [
+          {
+            "name": "carVin",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "responses": {
+          "500": {
+            "description": "Internal Server Error",
+            "content": {
+              "*/*": {
+                "schema": {
+                  "$ref": "#/components/schemas/ModelAndView"
+                }
+              }
+            }
+          },
+          "200": {
+            "description": "OK",
+            "content": {
+              "*/*": {
+                "schema": {
+                  "$ref": "#/components/schemas/CarHistoryDTO"
+                }
+              }
+            }
+          }
+        }
+      }
+    }
+  },
+  "components": {
+    "schemas": {
+      "HttpStatusCode": {
+        "type": "object",
+        "properties": {
+          "error": {
+            "type": "boolean"
+          },
+          "is5xxServerError": {
+            "type": "boolean"
+          },
+          "is4xxClientError": {
+            "type": "boolean"
+          },
+          "is2xxSuccessful": {
+            "type": "boolean"
+          },
+          "is3xxRedirection": {
+            "type": "boolean"
+          },
+          "is1xxInformational": {
+            "type": "boolean"
+          }
+        }
+      },
+      "ModelAndView": {
+        "type": "object",
+        "properties": {
+          "view": {
+            "$ref": "#/components/schemas/View"
+          },
+          "model": {
+            "type": "object",
+            "additionalProperties": {
+              "type": "object"
+            }
+          },
+          "status": {
+            "$ref": "#/components/schemas/HttpStatusCode"
+          },
+          "empty": {
+            "type": "boolean"
+          },
+          "viewName": {
+            "type": "string"
+          },
+          "modelMap": {
+            "type": "object",
+            "properties": {
+              "empty": {
+                "type": "boolean"
+              }
+            },
+            "additionalProperties": {
+              "type": "object"
+            }
+          },
+          "reference": {
+            "type": "boolean"
+          }
+        }
+      },
+      "View": {
+        "type": "object",
+        "properties": {
+          "contentType": {
+            "type": "string"
+          }
+        }
+      },
+      "CarServiceCustomerRequestDTO": {
+        "type": "object",
+        "properties": {
+          "existingCustomerEmail": {
+            "type": "string"
+          },
+          "customerName": {
+            "type": "string"
+          },
+          "customerSurname": {
+            "type": "string"
+          },
+          "customerEmail": {
+            "type": "string"
+          },
+          "customerPhone": {
+            "type": "string"
+          },
+          "customerAddressCountry": {
+            "type": "string"
+          },
+          "customerAddressCity": {
+            "type": "string"
+          },
+          "customerAddressPostalCode": {
+            "type": "string"
+          },
+          "customerAddressStreet": {
+            "type": "string"
+          },
+          "existingCarVin": {
+            "type": "string"
+          },
+          "carVin": {
+            "type": "string"
+          },
+          "carBrand": {
+            "type": "string"
+          },
+          "carModel": {
+            "type": "string"
+          },
+          "carYear": {
+            "type": "integer",
+            "format": "int32"
+          },
+          "customerComment": {
+            "type": "string"
+          },
+          "newCar": {
+            "type": "boolean"
+          }
+        }
+      },
+      "CarServiceRequestDTO": {
+        "type": "object",
+        "properties": {
+          "carServiceRequestNumber": {
+            "type": "string"
+          },
+          "receivedDateTime": {
+            "type": "string"
+          },
+          "completedDateTime": {
+            "type": "string"
+          },
+          "customerComment": {
+            "type": "string"
+          },
+          "carVin": {
+            "type": "string"
+          }
+        }
+      },
+      "CarServiceRequestsDTO": {
+        "type": "object",
+        "properties": {
+          "carServiceRequests": {
+            "type": "array",
+            "items": {
+              "$ref": "#/components/schemas/CarServiceRequestDTO"
+            }
+          }
+        }
+      },
+      "CarPurchaseRequestDTO": {
+        "type": "object",
+        "properties": {
+          "existingCustomerEmail": {
+            "type": "string"
+          },
+          "customerName": {
+            "type": "string"
+          },
+          "customerSurname": {
+            "type": "string"
+          },
+          "customerEmail": {
+            "type": "string"
+          },
+          "customerPhone": {
+            "maxLength": 2147483647,
+            "minLength": 0,
+            "pattern": "^[+]\\d{2}\\s\\d{3}\\s\\d{3}\\s\\d{3}$",
+            "type": "string"
+          },
+          "customerAddressCountry": {
+            "type": "string"
+          },
+          "customerAddressCity": {
+            "type": "string"
+          },
+          "customerAddressPostalCode": {
+            "type": "string"
+          },
+          "customerAddressStreet": {
+            "type": "string"
+          },
+          "carVin": {
+            "type": "string"
+          },
+          "salesmanPesel": {
+            "type": "string"
+          }
+        }
+      },
+      "InvoiceDTO": {
+        "type": "object",
+        "properties": {
+          "invoiceNumber": {
+            "type": "string"
+          },
+          "dateTime": {
+            "type": "string",
+            "format": "date-time"
+          }
+        }
+      },
+      "CarServiceMechanicProcessingUnitDTO": {
+        "type": "object",
+        "properties": {
+          "mechanicPesel": {
+            "type": "string"
+          },
+          "carVin": {
+            "type": "string"
+          },
+          "partSerialNumber": {
+            "type": "string"
+          },
+          "partQuantity": {
+            "type": "integer",
+            "format": "int32"
+          },
+          "serviceCode": {
+            "type": "string"
+          },
+          "hours": {
+            "type": "integer",
+            "format": "int32"
+          },
+          "mechanicComment": {
+            "type": "string"
+          },
+          "done": {
+            "type": "boolean"
+          }
+        }
+      },
+      "CarToBuyDTO": {
+        "type": "object",
+        "properties": {
+          "vin": {
+            "type": "string"
+          },
+          "brand": {
+            "type": "string"
+          },
+          "model": {
+            "type": "string"
+          },
+          "year": {
+            "type": "integer",
+            "format": "int32"
+          },
+          "color": {
+            "type": "string"
+          },
+          "price": {
+            "type": "number"
+          }
+        }
+      },
+      "CarsToBuyDTO": {
+        "type": "object",
+        "properties": {
+          "carsToBuy": {
+            "type": "array",
+            "items": {
+              "$ref": "#/components/schemas/CarToBuyDTO"
+            }
+          }
+        }
+      },
+      "CarHistoryDTO": {
+        "type": "object",
+        "properties": {
+          "carVin": {
+            "type": "string"
+          },
+          "carServiceRequests": {
+            "type": "array",
+            "items": {
+              "$ref": "#/components/schemas/ServiceRequestDTO"
+            }
+          }
+        }
+      },
+      "PartDTO": {
+        "type": "object",
+        "properties": {
+          "serialNumber": {
+            "type": "string"
+          },
+          "description": {
+            "type": "string"
+          },
+          "price": {
+            "type": "number"
+          }
+        }
+      },
+      "ServiceDTO": {
+        "type": "object",
+        "properties": {
+          "serviceCode": {
+            "type": "string"
+          },
+          "description": {
+            "type": "string"
+          },
+          "price": {
+            "type": "number"
+          }
+        }
+      },
+      "ServiceRequestDTO": {
+        "type": "object",
+        "properties": {
+          "carServiceRequestNumber": {
+            "type": "string"
+          },
+          "receivedDateTime": {
+            "type": "string"
+          },
+          "completedDateTime": {
+            "type": "string"
+          },
+          "customerComment": {
+            "type": "string"
+          },
+          "services": {
+            "type": "array",
+            "items": {
+              "$ref": "#/components/schemas/ServiceDTO"
+            }
+          },
+          "parts": {
+            "type": "array",
+            "items": {
+              "$ref": "#/components/schemas/PartDTO"
+            }
+          }
+        }
+      }
+    }
+  }
+}
