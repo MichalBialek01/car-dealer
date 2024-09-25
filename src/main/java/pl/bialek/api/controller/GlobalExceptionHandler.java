@@ -4,6 +4,7 @@ import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.HttpStatus;
 import org.springframework.validation.BindException;
 import org.springframework.validation.FieldError;
+import org.springframework.web.bind.MethodArgumentNotValidException;
 import org.springframework.web.bind.annotation.ControllerAdvice;
 import org.springframework.web.bind.annotation.ExceptionHandler;
 import org.springframework.web.bind.annotation.ResponseStatus;
@@ -49,5 +50,23 @@ public class GlobalExceptionHandler {
          return modelAndView;
     }
 
+
+    @ExceptionHandler(MethodArgumentNotValidException.class)
+    @ResponseStatus(HttpStatus.BAD_REQUEST)
+    public ModelAndView handleMethodArgumentNotValidException(MethodArgumentNotValidException ex) {
+        StringBuilder errorMessage = new StringBuilder("Validation failed for fields: ");
+
+        ex.getBindingResult().getFieldErrors().forEach(fieldError -> {
+            errorMessage.append(String.format("{%s} rejected value: {%s}; ",
+                    fieldError.getField(),
+                    fieldError.getRejectedValue()));
+        });
+
+        log.error(errorMessage.toString(), ex);
+
+        ModelAndView modelView = new ModelAndView("error");
+        modelView.addObject("errorMessage", errorMessage.toString());
+        return modelView;
+    }
 
 }

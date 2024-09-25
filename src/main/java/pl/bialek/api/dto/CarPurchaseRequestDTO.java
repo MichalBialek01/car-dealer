@@ -42,7 +42,7 @@ public class CarPurchaseRequestDTO {
                 .customerName("Michal")
                 .customerSurname("Bialek")
                 .customerEmail("michal.bialek@mail.com")
-                .customerPhone("886345246")
+                .customerPhone("+48 123 456 789")
                 .customerAddressCountry("Poland")
                 .customerAddressCity("Wroclaw")
                 .customerAddressPostalCode("50-339")
