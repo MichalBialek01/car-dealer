@@ -26,9 +26,9 @@ public class CarDealershipUserDetailsService implements UserDetailsService {
     }
 
 
-    private List<GrantedAuthority> getUserAuthority(Set<AuthorityEntity> userRoles) {
-        return userRoles.stream()
-                .map(role -> new SimpleGrantedAuthority(role.getAuthority()))
+    private List<GrantedAuthority> getUserAuthority(Set<AuthorityEntity> userAuthority) {
+        return userAuthority.stream()
+                .map(authority -> new SimpleGrantedAuthority(authority.getAuthority()))
                 .distinct()
                 .collect(Collectors.toList());
     }
