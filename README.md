@@ -6,16 +6,18 @@ Aplikacja do zarządzania salonem samochdowym z modułami:
 * **Zgłoszenia serwisowego**
 * **Obłsugi zgłoszeń serwisowych przez mechaników**
 
-Widok główny modułu sprzedawcyS:
-![salesman.png](salesman_view.png)
-Widok modułu zakupowego: 
-![car_sale_module.png](car_sale_module.png)
-Widok modułu zgłoszeń serwisowych:
-![car_service_request_module](car_service_request_module.png)
-Widok mechanika:
-![mechanic_module.png](mechanic_module.png)
-Widok modułu histori:
-![history_module.png](history_module.png)
+Jest to kontynuacja projektu z repozytorium: [car-dealer-mvc 🚗](https://github.com/MichalBialek01/car-dealer-mvc) do którego dodano API wraz z testami
+
+[<img src="https://run.pstmn.io/button.svg" alt="Run In Postman" style="width: 128px; height: 32px;">](https://app.getpostman.com/run-collection/36937424-0147c2b8-a899-42f3-9173-34e8dd1921e0?action=collection%2Ffork&source=rip_markdown&collection-url=entityId%3D36937424-0147c2b8-a899-42f3-9173-34e8dd1921e0%26entityType%3Dcollection%26workspaceId%3Dd24e772e-b4d3-409e-8818-e4719d0070fb)
+
+
+Swagger documentation:
+<a href="https://github.com/MichalBialek01/car-dealer-mvc-v2/blob/master/src/main/resources/swagger-ui.json"><img src="https://camo.githubusercontent.com/a1b132bbb48c1d919861d62805932eca6ac2fa662c03300d2e4bf418071c1956/68747470733a2f2f7777772e7376677265706f2e636f6d2f73686f772f3337343131312f737761676765722e737667" alt="Swagger" width="20px" height="20px"/>
+</a>
+
+
+
+
 
 Aplikacja została napisanie w architekturze 3 warstwowej.
 
