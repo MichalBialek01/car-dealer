@@ -1,20 +1,15 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <configuration>
-    <include resource="org/springframework/boot/logging/logback/defaults.xml"/>
-    <root level="info">
+
+    <appender name="CONSOLE" class="ch.qos.logback.core.ConsoleAppender">
+        <encoder>
+            <charset>UTF-8</charset>
+            <pattern>[%t] %-5level %logger{36} - %msg%n</pattern>
+        </encoder>
+    </appender>
+
+    <root level="INFO">
         <appender-ref ref="CONSOLE"/>
     </root>
-
-    <springProfile name="prod">
-        <root level="INFO">
-            <appender-ref ref="CONSOLE/"/>
-        </root>
-    </springProfile>
-
-    <springProfile name="local | dev ">
-        <root level="DEBUG">
-            <appender-ref ref="CONSOLE/>"/>
-        </root>
-    </springProfile>
 
 </configuration>
