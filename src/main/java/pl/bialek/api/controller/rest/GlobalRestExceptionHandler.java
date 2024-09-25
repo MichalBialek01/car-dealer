@@ -1,4 +1,4 @@
-package pl.bialek.api.controller;
+package pl.bialek.api.controller.rest;
 
 
 import jakarta.persistence.EntityNotFoundException;

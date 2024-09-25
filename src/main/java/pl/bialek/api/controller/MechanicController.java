@@ -1,5 +1,6 @@
 package pl.bialek.api.controller;
 
+import jakarta.validation.Valid;
 import lombok.AllArgsConstructor;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.ModelMap;
@@ -74,13 +75,9 @@ public class MechanicController {
 
     @PostMapping(value = MECHANIC_WORK_UNIT)
     public String mechanicWorkUnit(
-            @ModelAttribute("carServiceRequestProcessDTO") CarServiceMechanicProcessingUnitDTO dto,
-            BindingResult bindingResult,
+            @Valid @ModelAttribute("carServiceRequestProcessDTO") CarServiceMechanicProcessingUnitDTO dto,
             ModelMap modelMap
     ) {
-        if (bindingResult.hasErrors()) {
-            return "error";
-        }
         CarServiceProcessingRequest request = carServiceRequestDtoMapper.map(dto);
         carServiceProcessingService.process(request);
         if (dto.getDone()) {
