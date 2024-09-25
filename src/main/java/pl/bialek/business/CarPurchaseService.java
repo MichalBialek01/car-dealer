@@ -6,6 +6,7 @@ import pl.bialek.domain.*;
 
 import java.time.OffsetDateTime;
 import java.util.List;
+import java.util.Objects;
 import java.util.Set;
 import java.util.UUID;
 
@@ -15,18 +16,24 @@ public class CarPurchaseService {
 
     private final CustomerService customerService;
     private final CarService carService;
-    private final SalesmanService salesmanSercice;
+    private final SalesmanService salesmanService;
 
     public Invoice purchase(CarPurchaseRequest carPurchaseRequest) {
 
-        return carPurchaseRequest.getExistingCustomerEmail().isBlank()
-                ? processFirstTimeCustomer(carPurchaseRequest)
-                : processNextTimeCustomer(carPurchaseRequest);
+        return existingCustomerEmailExists(carPurchaseRequest.getExistingCustomerEmail())
+                ? processNextTimeCustomer(carPurchaseRequest)
+                :  processFirstTimeCustomer(carPurchaseRequest);
+
+
+    }
+
+    private boolean existingCustomerEmailExists(String existingCustomerEmail) {
+        return Objects.nonNull(existingCustomerEmail) && !existingCustomerEmail.isBlank();
     }
 
     private Invoice processFirstTimeCustomer(CarPurchaseRequest carPurchaseRequest) {
         CarToBuy carToBuy = carService.findCarToBuy(carPurchaseRequest.getCarVin());
-        Salesman salesman = salesmanSercice.findSalesman(carPurchaseRequest.getSalesmanPesel());
+        Salesman salesman = salesmanService.findSalesman(carPurchaseRequest.getSalesmanPesel());
         Invoice invoice = buildInvoice(carToBuy, salesman);
 
         Customer customer = buildCustomer(carPurchaseRequest,invoice);
@@ -37,7 +44,7 @@ public class CarPurchaseService {
     private Invoice processNextTimeCustomer(CarPurchaseRequest carPurchaseRequest) {
             Customer existingCustomer = customerService.findCustomer(carPurchaseRequest.getExistingCustomerEmail());
             CarToBuy car = carService.findCarToBuy(carPurchaseRequest.getCarVin());
-            Salesman salesman = salesmanSercice.findSalesman(carPurchaseRequest.getSalesmanPesel());
+            Salesman salesman = salesmanService.findSalesman(carPurchaseRequest.getSalesmanPesel());
             Invoice invoice = buildInvoice(car, salesman);
             Set<Invoice> existingInvoices = existingCustomer.getInvoices();
             existingInvoices.add(invoice);
@@ -69,7 +76,7 @@ public class CarPurchaseService {
         //Catching car - having single value (VIN)
         CarToBuy car = carService.findCarToBuy(inputData.getCarVin());
         //Caching Salesman - having single value (PESEL)
-        Salesman salesman = salesmanSercice.findSalesman(inputData.getSalesmanPesel());
+        Salesman salesman = salesmanService.findSalesman(inputData.getSalesmanPesel());
         //Building Invoice basing on buingCar and salesman
         Invoice invoice = buildInvoice(car, salesman);
         exisitngCustomer.getInvoices().add(invoice);
@@ -93,6 +100,6 @@ public class CarPurchaseService {
     }
 
     public List<Salesman> availableSalesmen() {
-        return salesmanSercice.findAvailableSalesmen();
+        return salesmanService.findAvailableSalesmen();
     }
 }
