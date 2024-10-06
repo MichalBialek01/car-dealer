@@ -10,24 +10,6 @@ Aplikacja jest kompleksowym systemem do zarządzania salonem samochodowym, obejm
 3. **Moduł obsługi zgłoszeń przez mechaników** – Mechanicy mogą zarządzać zgłoszeniami serwisowymi, aktualizować status napraw oraz zarządzać swoim harmonogramem pracy.
 
 
-<style>
-  table {
-    width: 100%;
-  }
-  td {
-    text-align: center;
-    padding: 10px;
-  }
-  img {
-    width: 150px;
-    height: auto;
-    transition: transform 0.2s;
-  }
-  img:hover {
-    transform: scale(1.5);
-  }
-</style>
-
 <table>
   <tr>
     <td>Moduł sprzedawcy:</td>
