@@ -1,54 +1,84 @@
-### Car Dealership Application 
 
-Aplikacja do zarządzania salonem samochdowym z modułami:
+# Car Dealership Application
 
-* **Zakupu samochodu** 
-* **Zgłoszenia serwisowego**
-* **Obłsugi zgłoszeń serwisowych przez mechaników**
+## Opis funkcjonalności biznesowych:
 
-Jest to kontynuacja projektu z repozytorium: [car-dealer-mvc 🚗](https://github.com/MichalBialek01/car-dealer-mvc) do którego dodano API wraz z testami
+Aplikacja jest kompleksowym systemem do zarządzania salonem samochodowym, obejmującym trzy główne moduły:
 
-[<img src="https://run.pstmn.io/button.svg" alt="Run In Postman" style="width: 128px; height: 32px;">](https://app.getpostman.com/run-collection/36937424-0147c2b8-a899-42f3-9173-34e8dd1921e0?action=collection%2Ffork&source=rip_markdown&collection-url=entityId%3D36937424-0147c2b8-a899-42f3-9173-34e8dd1921e0%26entityType%3Dcollection%26workspaceId%3Dd24e772e-b4d3-409e-8818-e4719d0070fb)
-
-
-Swagger documentation:
-<a href="https://github.com/MichalBialek01/car-dealer-mvc-v2/blob/master/src/main/resources/swagger-ui.json"><img src="https://camo.githubusercontent.com/a1b132bbb48c1d919861d62805932eca6ac2fa662c03300d2e4bf418071c1956/68747470733a2f2f7777772e7376677265706f2e636f6d2f73686f772f3337343131312f737761676765722e737667" alt="Swagger" width="20px" height="20px"/>
-</a>
+1. **Moduł zakupu samochodu** – Pozwala użytkownikom na przeglądanie dostępnych samochodów, składanie zamówień oraz finalizację zakupu.
+2. **Moduł zgłoszeń serwisowych** – Klienci mogą zgłaszać potrzebę serwisowania swoich pojazdów, śledzić status napraw oraz zarządzać harmonogramem wizyt.
+3. **Moduł obsługi zgłoszeń przez mechaników** – Mechanicy mogą zarządzać zgłoszeniami serwisowymi, aktualizować status napraw oraz zarządzać swoim harmonogramem pracy.
 
 
+<style>
+  table {
+    width: 100%;
+  }
+  td {
+    text-align: center;
+    padding: 10px;
+  }
+  img {
+    width: 150px;
+    height: auto;
+    transition: transform 0.2s;
+  }
+  img:hover {
+    transform: scale(1.5);
+  }
+</style>
 
+<table>
+  <tr>
+    <td>Moduł sprzedawcy:</td>
+    <td>Moduł zakupowy:</td>
+  </tr>
+  <tr>
+    <td><img src="https://github.com/user-attachments/assets/3cda9323-6f2a-427a-b439-145177f05917" alt="salesman_view"></td>
+    <td><img src="https://github.com/user-attachments/assets/3f4eabe7-5769-49a9-9dfa-90f8b0b484ec" alt="car_sale_module"></td>
+  </tr>
+  <tr>
+    <td>Moduł zgłoszeń serwisowych:</td>
+    <td>Moduł mechanika:</td>
+  </tr>
+  <tr>
+    <td><img src="https://github.com/user-attachments/assets/d12b7ba1-d44b-41ca-92f4-4a9420550765" alt="car_service_request_module"></td>
+    <td><img src="https://github.com/user-attachments/assets/2ac6c83b-8985-4e77-a8b6-fadbf7836cdf" alt="mechanic_module"></td>
+  </tr>
+  <tr>
+    <td>Moduł historii:</td>
+    <td></td>
+  </tr>
+  <tr>
+    <td><img src="https://github.com/user-attachments/assets/c5f9e22e-2b11-45be-91c2-fcfbc91b865c" alt="history_module"></td>
+    <td></td>
+  </tr>
+</table>
 
+## Architektura
 
-Aplikacja została napisanie w architekturze 3 warstwowej.
+Aplikacja została zaprojektowana w architekturze trójwarstwowej, co zapewnia modularność i łatwość w utrzymaniu kodu:
 
-Technology stack:
+1. **Warstwa prezentacji (frontend)** – Odpowiada za interakcję użytkownika z aplikacją. Opiera się na technologii **Thymeleaf**, która umożliwia generowanie dynamicznych widoków HTML po stronie serwera.
 
-[//]: # (1. **Spring Boot** - zarządzanie zależnościami i konfiguracja)
+2. **Warstwa logiki biznesowej (backend)** – Obsługuje logikę aplikacji, w tym przetwarzanie żądań użytkownika oraz zarządzanie procesami biznesowymi, takimi jak sprzedaż i serwis. Używa **Spring Boot** do zarządzania zależnościami i konfiguracji oraz **Spring Web** do obsługi REST API.
 
-[//]: # (3. **Spring Web** - Wystawianie REST API, oraz działanie aplikacji poprzez model MVC )
+3. **Warstwa dostępu do danych** – Zajmuje się operacjami na bazie danych. Wykorzystuje **Spring JPA** do mapowania obiektowo-relacyjnego (ORM) i integracji z bazą **PostgreSQL** oraz narzędzie **FlyWay** do zarządzania migracjami bazy danych.
 
-[//]: # (&#40;Kontrolery przekazujące dane do modeli ich wykorzystanie do generowania widoku przy pomocy silnika szablonów Thymeleaf&#41; )
+## Stos technologiczny:
 
-[//]: # (2. **Spring Security** - logowanie, oraz rejrestracja użytkownikow, oraz rola administratora.)
+| Logo                                                                                                 | **Technologia**                       | Opis zastosowania                                                                                                                                                                          |
+|------------------------------------------------------------------------------------------------------|---------------------------------------|--------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------|
+| <img src="https://cdn.worldvectorlogo.com/logos/spring-3.svg" alt="Spring Boot" width="40" height="40">                                   | **Spring Boot**                       | Zarządzanie zależnościami i konfiguracja.                                                                                                                                                  |
+| <img src="https://cdn.worldvectorlogo.com/logos/spring-3.svg" alt="Spring Web" width="40" height="40">                                    | **Spring Web**                        | Wystawianie REST API, działanie aplikacji poprzez model MVC. Kontrolery przekazują dane do modeli, a widoki są generowane przy pomocy Thymeleaf.                                            |
+| <img src="https://cdn.worldvectorlogo.com/logos/spring-3.svg" alt="Spring Security" width="40" height="40">                               | **Spring Security**                   | Logowanie, rejestracja użytkowników oraz zarządzanie rolami administratora.                                                                                                                 |
+| <img src="https://www.svgrepo.com/show/374111/swagger.svg" alt="Swagger" width="40" height="40">                                          | **Swagger i OpenAPI generator**       | Generowanie i wykorzystanie szkieletu aplikacji na podstawie dokumentacji Swagger, przy pomocy OpenAPI.                                                                                      |
+| <img src="https://upload.wikimedia.org/wikipedia/commons/thumb/2/29/Postgresql_elephant.svg/640px-Postgresql_elephant.svg.png" alt="Postgres" width="40" height="40"> <img src="https://upload.wikimedia.org/wikipedia/commons/e/e1/Flyway_logo.svg" alt="FlyWay" width="40" height="40"> | **DB - Postgres, Spring JPA, FlyWay** | Inicjalizacja struktury bazy danych, przykładowe dane testowe, tworzenie użytkowników i przypisywanie odpowiednich ról.                                                                     |
+| <img src="https://upload.wikimedia.org/wikipedia/commons/b/b2/Bootstrap_logo.svg" alt="Bootstrap" width="40" height="40">                  | **Bootstrap**                         | Stylowanie widoków i layoutów aplikacji.                                                                                                                                                     |
+| <img src="https://seeklogo.com/images/T/thymeleaf-logo-6E4D42A713-seeklogo.com.png" alt="Thymeleaf" width="40" height="40">               | **Thymeleaf**                         | Silnik szablonów wykorzystywany do renderowania widoków po stronie serwera.                                                                                                                |
+| <img src="https://junit.org/junit5/assets/img/junit5-logo.png" alt="JUnit" width="40" height="40">                                        | **JUnit**                             | Testy jednostkowe z wykorzystaniem jUnit.                                                                                                                                                   |
+| <img src="https://avatars.githubusercontent.com/u/13393021?s=280&v=4" alt="Testcontainers" width="40" height="40"> <img src="https://raw.githubusercontent.com/mockito/mockito/main/src/main/javadoc/org/mockito/logo.png" alt="Mockito" width="40" height="40"> | **Testcontainers, Mockito, RestAssured, Wiremock** | Testy integracyjne z wykorzystaniem Testcontainers, Mockito, RestAssured i Wiremock.                                                                                                       |
 
-[//]: # (3. **Swagger i OpenAPI generator** - Na podstawie dokumentacji Swagger, przy pomocy OpenAPI wygenerowałem i wykorzystałem szkielet aplikacji)
+Aplikacja wykorzystuje również integrację z **Postman** oraz **Swagger** do testowania API i dokumentacji, a także szeroko zakrojone testy jednostkowe i integracyjne przy pomocy narzędzi takich jak **JUnit**, **Testcontainers**, **Mockito**, **RestAssured** i **Wiremock**.
 
-[//]: # (4. **DB - Postgres, SprignJPA,FlyWay** – inicjalizacja struktury bazy danych, inicjalizacja przykładowymi danymi testowymi, oraz do tworzenia użytkowników wraz z odpowiednimi rolami)
-
-[//]: # (5. **Testy jednostkowe** - jUnit, assertJ.)
-
-[//]: # (6. **Test integracyjne** z wykorzystaniem testcontainers – Mockito, RestAssured i Wiremock)
-
-[//]: # ()
-
-| Logo                                                                                                                                                                                                                                                                           | **Technologia**                      | Opis zastosowania                                                                                                                                                                      |
-|--------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------|--------------------------------------|----------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------|
-|                                                                                                                                                                                                                                                                                | **Spring Boot**                      | Zarządzanie zależnościami i konfiguracja.                                                                                                                                              |
-| ![Spring Web logo](https://cdn.worldvectorlogo.com/logos/spring-3.svg)                                                                                                                                                                                                         | **Spring Web**                       | Wystawianie REST API, oraz działanie aplikacji poprzez model MVC. Kontrolery przekazujące dane do modeli, wykorzystanie do generowania widoku przy pomocy silnika szablonów Thymeleaf. |
-|                                                                                                                                                                                                                                                                                | **Spring Security**                  | Logowanie, rejestracja użytkowników, oraz zarządzanie rolami administratora.                                                                                                           |
-| ![Swagger logo](https://camo.githubusercontent.com/a1b132bbb48c1d919861d62805932eca6ac2fa662c03300d2e4bf418071c1956/68747470733a2f2f7777772e7376677265706f2e636f6d2f73686f772f3337343131312f737761676765722e737667)                                                            | **Swagger i OpenAPI generator**      | Generowanie i wykorzystanie szkieletu aplikacji na podstawie dokumentacji Swagger, przy pomocy OpenAPI.                                                                                |
-| ![Postgres logo](https://upload.wikimedia.org/wikipedia/commons/thumb/2/29/Postgresql_elephant.svg/640px-Postgresql_elephant.svg.png)             ![FlyWay](https://upload.wikimedia.org/wikipedia/commons/e/e1/Flyway_logo.svg)                                               | **DB - Postgres, SpringJPA, FlyWay** | Inicjalizacja struktury bazy danych, przykładowe dane testowe, tworzenie użytkowników i przypisywanie odpowiednich ról.                                                                |
-| ![Bootstrap](https://upload.wikimedia.org/wikipedia/commons/b/b2/Bootstrap_logo.svg)   ![Thymeleaf](https://seeklogo.com/images/T/thymeleaf-logo-6E4D42A713-seeklogo.com.png)   ![Tomcat ](https://upload.wikimedia.org/wikipedia/commons/thumb/f/fe/Apache_Tomcat_logo.svg/640px-Apache_Tomcat_logo.svg.png)           | **Widok,silnik szablonów oraz serwer aplikacji**     |                                                                                                                                                                                        |
-| ![JUnit logo](https://junit.org/junit5/assets/img/junit5-logo.png)                                                                                                                                                                                                             | **Testy jednostkowe**                | Testy jednostkowe z wykorzystaniem jUnit.                                                                                                                                              |
-| ![Testcontainers logo](https://avatars.githubusercontent.com/u/13393021?s=280&v=4) ![Testcontainers logo](https://avatars.githubusercontent.com/u/21368587?s=280&v=4) ![Mockito](https://raw.githubusercontent.com/mockito/mockito/main/src/main/javadoc/org/mockito/logo.png) | **Testy integracyjne**               | Testy integracyjne z wykorzystaniem Testcontainers, Mockito, RestAssured i Wiremock.                                                                                                   |
-
+Projekt wspiera architekturę opartą na REST API, a dodatkowe szczegóły dotyczące działania modułów oraz możliwości można znaleźć w dokumentacji Swagger dostępnej w projekcie.
