@@ -73,6 +73,8 @@ Warstwa persystencji składa się z encji bazodanowych, repozrytoriów JPA, repo
 Encje bazodanowe definują jak wygląda schemat klasy zapisywany do bazy danych.
 Repozytoria JPA pozwalają na łatwe wyciaganie danych z bazy danych. Z tych repozytoriów korzystają repozytoria wrapujące, do których wstrzykiwane są kilka repozytriów JPA w celu stworzenia złożonego zapytania do baz danych (wykorzystujący więcej niż 2 klasy )
 
+## Diagram ERD wykonany w notacji UML:
+<img src="https://github.com/MichalBialek01/car-dealer/blob/master/src/main/resources/Car_dealership_project.jpg">
 
 ## Warstwa Security
 W tej warstwie definujemy SecurityConfiguration, UserDetailsService, Encje definujące Authroities.
