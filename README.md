@@ -1,14 +1,13 @@
+Jest to kontynuacja projektu z repozytorium: [car-dealer-mvc 🚗](https://github.com/MichalBialek01/car-dealer-mvc)
 
-# Car Dealership Application
 
-## Opis funkcjonalności biznesowych:
-
-Aplikacja jest kompleksowym systemem do zarządzania salonem samochodowym, obejmującym trzy główne moduły:
-
-1. **Moduł zakupu samochodu** – Pozwala użytkownikom na przeglądanie dostępnych samochodów, składanie zamówień oraz finalizację zakupu.
-2. **Moduł zgłoszeń serwisowych** – Klienci mogą zgłaszać potrzebę serwisowania swoich pojazdów, śledzić status napraw oraz zarządzać harmonogramem wizyt.
-3. **Moduł obsługi zgłoszeń przez mechaników** – Mechanicy mogą zarządzać zgłoszeniami serwisowymi, aktualizować status napraw oraz zarządzać swoim harmonogramem pracy.
-
+## Funkcjonalności biznesowe
+Projekt składa się z 4 modułów biznesowych:
+* Moduł widoku sprzedawcy, w którym mamy widok na: dostępne do zakupu samochody, dostępnych sprzedaców, oraz dostępnych mechaników
+* Moduł zakupowy - moduł w którym sprzedawca może wporwadzić zakup samochodyu poprzez podanie jego pełnych danych (w przypadku nowego klienta), lub sam email w przypadku istniejacego klienta. Oprócz tego wybierany jest samochód, oraz sprzedawca sprzedający.
+* Moduł sprzedażowy - moduł w którym sprzedawca może wprowadzić nowego klienta zgłaszającego naprawę samochodu, oraz istniejącego klienta
+* Moduł mechanika - moduł, w którym mechanik widzi zgłoszenia serwisowe, ma możliwość ich realizacji, widzi dostępne serwisy oraz częsci do wykorzystania
+* Moduł widoku histrii - moduł w ktorym jest możlwiość wyświetlenia historii zakupowej
 
 <table>
   <tr>
@@ -37,15 +36,57 @@ Aplikacja jest kompleksowym systemem do zarządzania salonem samochodowym, obejm
   </tr>
 </table>
 
-## Architektura
+## Warstwa Prezentacji
+Jest to warstwa odpowiedzialna za interakcję z użytkownikami naszej aplikacji.
+W tym programie zostały zaimplementowane kontrolery MVC, które odpowiadają za renderowanie widoku przy pomocy silnika szablonów Thymeleaf, oraz następnie jest hostowany przez wbudowany w Spring Boot serwer aplikacyjny Tomcat.
+Zaimplementowane zostały również controlery REST, które serwują dane do konsumpcji przez Frontend, lub przez innych kilentów API np. Postamn
+Do kontrolerów REST zostały dodane annotacje, do generowania dokumentacji SwaggeUI dostępnej poniżej, oraz : 
 
-Aplikacja została zaprojektowana w architekturze trójwarstwowej, co zapewnia modularność i łatwość w utrzymaniu kodu:
+[<img src="https://run.pstmn.io/button.svg" alt="Run In Postman" style="width: 128px; height: 32px;">](https://app.getpostman.com/run-collection/36937424-0147c2b8-a899-42f3-9173-34e8dd1921e0?action=collection%2Ffork&source=rip_markdown&collection-url=entityId%3D36937424-0147c2b8-a899-42f3-9173-34e8dd1921e0%26entityType%3Dcollection%26workspaceId%3Dd24e772e-b4d3-409e-8818-e4719d0070fb)
 
-1. **Warstwa prezentacji (frontend)** – Odpowiada za interakcję użytkownika z aplikacją. Opiera się na technologii **Thymeleaf**, która umożliwia generowanie dynamicznych widoków HTML po stronie serwera.
+[Swagger Documentation](https://github.com/MichalBialek01/car-dealer-mvc-v2/blob/master/src/main/resources/swagger-ui.json)
 
-2. **Warstwa logiki biznesowej (backend)** – Obsługuje logikę aplikacji, w tym przetwarzanie żądań użytkownika oraz zarządzanie procesami biznesowymi, takimi jak sprzedaż i serwis. Używa **Spring Boot** do zarządzania zależnościami i konfiguracji oraz **Spring Web** do obsługi REST API.
+Do obsługi błędów REST API zastosowano GlobalRestExceptionHandler, który modyfikuje wyrzucanie wyjątków poprzez stworzenie unikalnego UUID błędu i zalogowania tej infromacji:
 
-3. **Warstwa dostępu do danych** – Zajmuje się operacjami na bazie danych. Wykorzystuje **Spring JPA** do mapowania obiektowo-relacyjnego (ORM) i integracji z bazą **PostgreSQL** oraz narzędzie **FlyWay** do zarządzania migracjami bazy danych.
+Do obsługi błędów MVC zastosowano, GlobalExceptionHandler który obsługuje poniższe wyjątki:
+
+MethodArgumentNotValidException -> 400 - Bad Request
+BindException -> 400 - Bad Request
+ProcessingException -> 500 - Internal Server Error
+
+W celu oddzielenia warstwy prezentacji, od warstwy logiki biznesowej zastosowano klasy DTO (Data Transfer Object).
+Obiekty te pozwalają na definowanie, jakie elementy struktury domenowej zostaną udostępnione użytkownikom. 
+W paczce tej znajdują się również mappery mapstruct, które odpowiadają, za automatyczne mapowanie klas domenowych na DTO.  
+
+W paczce API znajduje się również folder consume zawierający przykład konsumpcji API z wykorzystaniem OpenApiGeneator, przy pomocy ktorego mamy możlwiość pobrania losowego samochodu z wybranego województwa na podstawie zakresu dat rejestracji.
+
+
+## Warstwa logiki biznesowej
+
+Warstwa logiki biznesowej zawiera serwisy, które odpowiadają za logikę biznesową aplikacji.
+Dodatkowo jest również zastosowana warstwa DAO (Data Access Object) która odziela warstwę logiki biznesowej, od warstwy persystencji.
+Dzięki DAO użytkownicy warstwy biznesowej nie muszą znać szczegółów związanych z mechanizmami dostępu do danych (np. zapytaniami SQL), dzięki czemu aplikacja staje się bardziej modularna i łatwiejsza do utrzymania.
+W tej paczce znajdują się również klasy domenowe, które definują obiekty do modelowania.
+
+## Warstwa persystencji
+Warstwa persystencji składa się z encji bazodanowych, repozrytoriów JPA, repozytorió wrapujących, oraz mapperów.
+Encje bazodanowe definują jak wygląda schemat klasy zapisywany do bazy danych.
+Repozytoria JPA pozwalają na łatwe wyciaganie danych z bazy danych. Z tych repozytoriów korzystają repozytoria wrapujące, do których wstrzykiwane są kilka repozytriów JPA w celu stworzenia złożonego zapytania do baz danych (wykorzystujący więcej niż 2 klasy )
+
+
+## Warstwa Security
+W tej warstwie definujemy SecurityConfiguration, UserDetailsService, Encje definujące Authroities.
+
+
+## Resources
+W resources znajdziemy:
+
+* Migracje Flyway - które służą do kontrolowania wersji schematu bazy danych, automatycznej aktualizacji schematu bazy danych oraz w naszym przypadku w celach testowych do inicjalizacji danych testowych.
+* Contracts - zawiera plik json stosowany przez OpenApiGenerator
+* Templates - zawiera pliki html wraz z specjalnymi atrybutami Thymeleaf, które służą do dynamicznego renderowania stron HTML.
+
+## Testy - Cooming soon  
+
 
 ## Stos technologiczny:
 
